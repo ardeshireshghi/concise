@@ -73,7 +73,7 @@ class Server
 
   private function _reqPath()
   {
-    return parse_url($this->url, PHP_URL_PATH);
+    return rtrim(parse_url($this->url, PHP_URL_PATH), '/');
   }
 
   private function _reqMethodLowered()
