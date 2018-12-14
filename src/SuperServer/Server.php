@@ -70,7 +70,6 @@ class Server
       null;
   }
 
-
   private function _reqPath()
   {
     return rtrim(parse_url($this->url, PHP_URL_PATH), '/');
@@ -93,7 +92,5 @@ class Server
       array_unshift($args, $method);
       call_user_func_array(array($this, 'addRoute'), $args);
     }
-
-    return false;
   }
 }
