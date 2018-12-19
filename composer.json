@@ -5,6 +5,14 @@
     "autoload": {
         "psr-4": {
             "SuperServer\\": "src/SuperServer"
-        }
+        },
+        "files": [
+            "src/SuperServer/FP/functions.php",
+            "src/SuperServer/Http/request.php",
+            "src/SuperServer/Http/response.php",
+            "src/SuperServer/app.php",
+            "src/SuperServer/routing.php",
+            "src/SuperServer/routeMatcher.php"
+        ]
     }
 }
