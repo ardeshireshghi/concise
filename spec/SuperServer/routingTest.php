@@ -11,12 +11,12 @@ class RoutingTest extends TestCase
     $handlerFn = function () {
     };
     $expected = [
-    'method'   => 'GET',
-    'pattern'  => '/api/user/:id',
-    'handler'  => $handlerFn,
-    'regex'   => '/\/api\/user\/(?<id>[\w\-]+)/',
-    'params'   => ['id']
-  ];
+      'method'   => 'GET',
+      'pattern'  => '/api/user/:id',
+      'handler'  => $handlerFn,
+      'regex'   => '/\/api\/user\/(?<id>[\w\-]+)/',
+      'params'   => ['id']
+    ];
 
     $this->assertEquals($expected, route('GET')('/api/user/:id')($handlerFn));
   }

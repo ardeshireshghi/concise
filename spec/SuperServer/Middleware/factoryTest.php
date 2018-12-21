@@ -16,14 +16,14 @@ class MiddlewareFactoryTest extends TestCase
     };
 
     $middlewareParams = [
-    'name' => 'testmiddleware'
-  ];
+      'name' => 'testmiddleware'
+    ];
 
     $expectedRouteResponse = [
-    'id' => 'somevalue',
-    'middlewareName' => 'testmiddleware',
-    'response' => 'someresponse'
-  ];
+      'id' => 'somevalue',
+      'middlewareName' => 'testmiddleware',
+      'response' => 'someresponse'
+    ];
 
     $middleware = createMiddleware($middlewareFn);
     $handlerWithMiddleware = $middleware($middlewareParams)($routeHandler);

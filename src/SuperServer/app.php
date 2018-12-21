@@ -43,9 +43,9 @@ function createRouteHandler()
 {
   return function ($matchingRoutes) {
     return ifElse(
-    createMatchRouteChecker(),
-    createRouteHandlerInvoker(),
-    createRouteNotFoundHandler()
+  createMatchRouteChecker(),
+  createRouteHandlerInvoker(),
+  createRouteNotFoundHandler()
   )($matchingRoutes);
   };
 }
@@ -53,9 +53,5 @@ function createRouteHandler()
 
 function app($routes)
 {
-  return compose(
-  createRouteHandler(),
-  createRouteMatcherFilter(),
-  'array_values'
-  )($routes);
+  return compose(createRouteHandler(), createRouteMatcherFilter(), 'array_values')($routes);
 };

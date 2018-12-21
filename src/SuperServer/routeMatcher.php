@@ -33,11 +33,11 @@ function createRouteMatcherFilter()
     $regexResultMatches = matchRouteAgainstPath($route, path());
 
     return allPass(
-    $route['method'] === reqMethod(),
-    somePass(
-    routeWithNoParamMatchesPath($route, $regexResultMatches),
-    routeWithParamsMatchesPath($route, $regexResultMatches)
-    )
+  $route['method'] === reqMethod(),
+  somePass(
+  routeWithNoParamMatchesPath($route, $regexResultMatches),
+  routeWithParamsMatchesPath($route, $regexResultMatches)
+  )
   );
   });
 }

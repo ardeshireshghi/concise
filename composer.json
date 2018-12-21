@@ -7,7 +7,8 @@
     "scripts": {
         "start:web_api": "php -S 127.0.0.1:5000 examples/web-api/api.php",
         "test": "./vendor/bin/phpunit --colors",
-        "lint:fix": "./vendor/bin/php-cs-fixer fix"
+        "lint" : "./vendor/bin/php-cs-fixer fix -v --dry-run --using-cache=no",
+        "lint:fix": "./vendor/bin/php-cs-fixer fix -v --using-cache=no"
     },
     "autoload": {
         "psr-4": {

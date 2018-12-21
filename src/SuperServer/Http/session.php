@@ -11,8 +11,8 @@ const DEFAULT_SESSION_LIFETIME_SECONDS = 3600;
 function defaultConfig()
 {
   return [
-  'lifetime'     => DEFAULT_SESSION_LIFETIME_SECONDS,
-  'session_name'  => DEFAULT_SESSION_NAME
+    'lifetime'     => DEFAULT_SESSION_LIFETIME_SECONDS,
+    'session_name'  => DEFAULT_SESSION_NAME
   ];
 }
 

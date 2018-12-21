@@ -31,44 +31,44 @@ class AppTest extends TestCase
     }, $handlerCallArgs, $deleteHandlercallCount);
 
     app([
-    [
-    'method'  => 'POST',
-    'pattern' => '/api/user',
-    'handler' => function () {
-    },
-    'regex'    => '/\/api\/user/',
-    'params'   => []
-    ],
-    [
-    'method' => 'GET',
-    'pattern' => '/api/user/:id',
-    'handler' => function () {
-    },
-    'regex'   => '/\/api\/user\/(?<id>[\w\-]+)/',
-    'params'   => ['id']
-    ],
-    [
-    'method' => 'DELETE',
-    'pattern' => '/api/user/:id',
-    'handler' => $deleteHandlerSpy,
-    'regex'   => '/\/api\/user\/(?<id>[\w\-]+)/',
-    'params'   => ['id']
-    ],
-    [
-    'method' => 'PUT',
-    'pattern' => '/api/user/:id',
-    'handler' => function () {
-    },
-    'regex'   => '/\/api\/user\/(?<id>[\w\-]+)/',
-    'params'   => ['id']
-    ]
-  ]);
+      [
+        'method'  => 'POST',
+        'pattern' => '/api/user',
+        'handler' => function () {
+        },
+        'regex'    => '/\/api\/user/',
+        'params'   => []
+      ],
+      [
+        'method' => 'GET',
+        'pattern' => '/api/user/:id',
+        'handler' => function () {
+        },
+        'regex'   => '/\/api\/user\/(?<id>[\w\-]+)/',
+        'params'   => ['id']
+      ],
+      [
+        'method' => 'DELETE',
+        'pattern' => '/api/user/:id',
+        'handler' => $deleteHandlerSpy,
+        'regex'   => '/\/api\/user\/(?<id>[\w\-]+)/',
+        'params'   => ['id']
+      ],
+      [
+        'method' => 'PUT',
+        'pattern' => '/api/user/:id',
+        'handler' => function () {
+        },
+        'regex'   => '/\/api\/user\/(?<id>[\w\-]+)/',
+        'params'   => ['id']
+      ]
+    ]);
 
     $handlerFirstCallFirstArg = $handlerCallArgs[0][0];
 
     $this->assertEquals(1, $deleteHandlercallCount);
     $this->assertEquals([
-    'id' => '20'
-  ], $handlerFirstCallFirstArg);
+      'id' => '20'
+    ], $handlerFirstCallFirstArg);
   }
 }

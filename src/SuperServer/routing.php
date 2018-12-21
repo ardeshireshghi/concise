@@ -29,18 +29,18 @@ function routeWrapPattern()
 function routePatternsToFind()
 {
   return [
-  routeParamsPattern(),
-  routeSlashPattern(),
-  routeWrapPattern()
+    routeParamsPattern(),
+    routeSlashPattern(),
+    routeWrapPattern()
   ];
 }
 
 function routeReplacePatterns()
 {
   return [
-  namedCapturingGroupPattern(),
-  '\/',
-  '/$1/'
+    namedCapturingGroupPattern(),
+    '\/',
+    '/$1/'
   ];
 }
 
@@ -66,8 +66,8 @@ function routeSegments($route)
 function routeInternal($method, $pattern, callable $handler)
 {
   return array_merge(compact('method', 'pattern', 'handler'), [
-  'regex'   => createRegexFromPattern($pattern),
-  'params'  => paramNames($pattern)
+    'regex'   => createRegexFromPattern($pattern),
+    'params'  => paramNames($pattern)
   ]);
 }
 
