@@ -5,8 +5,6 @@ use function SuperServer\FP\curry;
 use function SuperServer\FP\reduce;
 use function SuperServer\FP\map;
 
-global $createRouteRegexPattern;
-
 function routeParamsPattern() {
   return '/:([\w\_]+)/';
 }
