@@ -4,7 +4,7 @@ use PHPUnit\Framework\TestCase;
 use function SuperServer\FP\map;
 use function SuperServer\Routing\route;
 
-class routingTest extends TestCase
+class RoutingTest extends TestCase
 {
   public function testRoute()
   {

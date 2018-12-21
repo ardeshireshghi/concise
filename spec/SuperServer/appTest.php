@@ -11,7 +11,7 @@ function spy(callable $fn, &$callArgs, &$callCounter) {
   };
 }
 
-class appTest extends TestCase
+class AppTest extends TestCase
 {
   public function testAppExist()
   {
