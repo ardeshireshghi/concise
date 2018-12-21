@@ -1,10 +1,13 @@
 {
+    "name": "php-super-server",
+    "version": "0.1.0",
     "require": {
-        "phpunit/phpunit": "^7.5"
+        "php": ">7.1.0"
     },
     "scripts": {
         "start:web_api": "php -S 127.0.0.1:5000 examples/web-api/api.php",
-        "test": "./vendor/bin/phpunit --colors"
+        "test": "./vendor/bin/phpunit --colors",
+        "lint:fix": "./vendor/bin/php-cs-fixer fix"
     },
     "autoload": {
         "psr-4": {
@@ -20,5 +23,9 @@
             "src/SuperServer/routing.php",
             "src/SuperServer/routeMatcher.php"
         ]
+    },
+    "require-dev": {
+        "friendsofphp/php-cs-fixer": "^2.13",
+        "phpunit/phpunit": "^7.5"
     }
 }
