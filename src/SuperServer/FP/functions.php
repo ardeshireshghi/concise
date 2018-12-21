@@ -87,9 +87,9 @@ function compose() {
 function ifElse() {
   return call_user_func_array(curry(function($conditionFn, $trueCallback, $falseCallback, $data) {
     if ($conditionFn($data)) {
-      $trueCallback($data);
+      return $trueCallback($data);
     } else {
-      $falseCallback($data);
+      return $falseCallback($data);
     }
   }), func_get_args());
 }
