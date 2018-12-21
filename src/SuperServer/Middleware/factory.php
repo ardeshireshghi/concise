@@ -8,8 +8,8 @@ use function SuperServer\FP\compose;
 
 function createMiddlewareFunction()
 {
-  return function ($middlewareFn, $middlewareParams, $routeHandler) {
-    return compose($routeHandler, partial($middlewareFn, [ $middlewareParams ]));
+  return function ($middlewareFn, $routeHandler, $middlewareParams) {
+    return partial($middlewareFn, [ $routeHandler, $middlewareParams ]);
   };
 }
 

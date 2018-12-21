@@ -7,8 +7,8 @@ class MiddlewareFactoryTest extends TestCase
 {
   public function testCreateMiddleware()
   {
-    $middlewareFn = function (array $middlewareParams = array(), $params) {
-      return array_merge($params, [ 'middlewareName' => $middlewareParams['name'] ]);
+    $middlewareFn = function (callable $handler, array $middlewareParams = array(), array $reqParams = array()) {
+      return $handler(array_merge($reqParams, [ 'middlewareName' => $middlewareParams['name'] ]));
     };
 
     $routeHandler = function ($params) {
@@ -26,7 +26,7 @@ class MiddlewareFactoryTest extends TestCase
     ];
 
     $middleware = createMiddleware($middlewareFn);
-    $handlerWithMiddleware = $middleware($middlewareParams)($routeHandler);
+    $handlerWithMiddleware = $middleware($routeHandler)($middlewareParams);
 
     $this->assertTrue(is_callable($handlerWithMiddleware));
     $this->assertEquals($expectedRouteResponse, $handlerWithMiddleware(['id' => 'somevalue']));

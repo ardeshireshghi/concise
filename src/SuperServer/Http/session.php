@@ -31,12 +31,17 @@ function initialise($config)
   }
 }
 
-function middleware($middlewareConfig)
+function middlewareHandler()
 {
-  return createMiddleware(function (array $config = array(), $params) {
-    initialise($config);
-    return $params;
-  })($middlewareConfig);
+  return function (callable $routeHandler, array $middlewareParams = array(), array $reqParams = array()) {
+    initialise($middlewareParams);
+    return $routeHandler($reqParams);
+  };
+}
+
+function middleware($routeHandler)
+{
+  return createMiddleware(middlewareHandler())($routeHandler);
 }
 
 function set(array $sessions = array())

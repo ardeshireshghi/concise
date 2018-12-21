@@ -20,7 +20,8 @@ function createMatchRouteChecker()
 
 function handlerWithDefaultMiddlewares($routeHandler)
 {
-  return sessionMiddleware([])($routeHandler);
+  $sessionMiddlewareParams = [];
+  return sessionMiddleware($routeHandler)($sessionMiddlewareParams);
 }
 
 function createRouteHandlerInvoker()
@@ -49,7 +50,6 @@ function createRouteHandler()
   )($matchingRoutes);
   };
 }
-
 
 function app($routes)
 {

@@ -23,7 +23,7 @@ class SessionTest extends TestCase
       'save_path'     => '/tmp'
     ];
 
-    $handlerWithSessionMiddleware = sessionMiddleware($middlewareConfig)($routeHandler);
+    $handlerWithSessionMiddleware = sessionMiddleware($routeHandler)($middlewareConfig);
 
     $this->assertTrue(is_callable($handlerWithSessionMiddleware));
     $this->assertEquals($expectedRouteResponse, $handlerWithSessionMiddleware(['id' => 'somevalue']));
