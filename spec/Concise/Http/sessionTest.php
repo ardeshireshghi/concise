@@ -1,8 +1,8 @@
 <?php
 
 use PHPUnit\Framework\TestCase;
-use function SuperServer\Http\Session\middleware as sessionMiddleware;
-use function SuperServer\Http\Session\set as setSession;
+use function Concise\Http\Session\middleware as sessionMiddleware;
+use function Concise\Http\Session\set as setSession;
 
 class SessionTest extends TestCase
 {

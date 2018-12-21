@@ -1,8 +1,8 @@
 <?php
 
 use PHPUnit\Framework\TestCase;
-use function SuperServer\FP\map;
-use function SuperServer\Routing\route;
+use function Concise\FP\map;
+use function Concise\Routing\route;
 
 class RoutingTest extends TestCase
 {

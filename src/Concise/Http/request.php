@@ -1,6 +1,6 @@
 <?php
 
-namespace SuperServer\Http\Request;
+namespace Concise\Http\Request;
 
 const URL_TRIM_CHAR = '/';
 

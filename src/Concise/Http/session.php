@@ -1,9 +1,9 @@
 <?php
 
-namespace SuperServer\Http\Session;
+namespace Concise\Http\Session;
 
-use function SuperServer\Middleware\Factory\create as createMiddleware;
-use function SuperServer\FP\ifElse;
+use function Concise\Middleware\Factory\create as createMiddleware;
+use function Concise\FP\ifElse;
 
 const DEFAULT_SESSION_NAME = 'super_server_fp_';
 const DEFAULT_SESSION_LIFETIME_SECONDS = 3600;

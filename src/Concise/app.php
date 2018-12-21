@@ -1,15 +1,15 @@
 <?php
 
-namespace SuperServer;
+namespace Concise;
 
-use function SuperServer\Http\Request\url;
-use function SuperServer\Http\Request\path;
-use function SuperServer\Http\Request\parseRouteParamsFromPath;
-use function SuperServer\Http\Response\response;
-use function SuperServer\Http\Session\middleware as sessionMiddleware;
-use function SuperServer\FP\compose;
-use function SuperServer\FP\ifElse;
-use function SuperServer\RouteMatcher\createRouteMatcherFilter;
+use function Concise\Http\Request\url;
+use function Concise\Http\Request\path;
+use function Concise\Http\Request\parseRouteParamsFromPath;
+use function Concise\Http\Response\response;
+use function Concise\Http\Session\middleware as sessionMiddleware;
+use function Concise\FP\compose;
+use function Concise\FP\ifElse;
+use function Concise\RouteMatcher\createRouteMatcherFilter;
 
 function createMatchRouteChecker()
 {

@@ -1,10 +1,10 @@
 <?php
 
-namespace SuperServer\Middleware\Factory;
+namespace Concise\Middleware\Factory;
 
-use function SuperServer\FP\curry;
-use function SuperServer\FP\partial;
-use function SuperServer\FP\compose;
+use function Concise\FP\curry;
+use function Concise\FP\partial;
+use function Concise\FP\compose;
 
 function createMiddlewareFunction()
 {

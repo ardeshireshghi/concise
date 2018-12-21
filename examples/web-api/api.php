@@ -2,12 +2,12 @@
 
 require './vendor/autoload.php';
 
-use function SuperServer\app;
-use function SuperServer\Routing\route;
+use function Concise\app;
+use function Concise\Routing\route;
 
-use function SuperServer\Http\Response\response;
-use function SuperServer\Http\Session\set as setSession;
-use function SuperServer\FP\ifElse;
+use function Concise\Http\Response\response;
+use function Concise\Http\Session\set as setSession;
+use function Concise\FP\ifElse;
 
 app([
   route('GET', '/home', function () {

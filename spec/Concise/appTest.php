@@ -1,7 +1,7 @@
 <?php
 
 use PHPUnit\Framework\TestCase;
-use function SuperServer\app as app;
+use function Concise\app as app;
 
 function spy(callable $fn, &$callArgs, &$callCounter)
 {
@@ -16,7 +16,7 @@ class AppTest extends TestCase
 {
   public function testAppExist()
   {
-    $this->assertTrue(function_exists('SuperServer\app'));
+    $this->assertTrue(function_exists('Concise\app'));
   }
 
   public function testAppRouteHandlerCalled()

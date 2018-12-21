@@ -1,7 +1,7 @@
 <?php
 
 use PHPUnit\Framework\TestCase;
-use function SuperServer\Middleware\Factory\create as createMiddleware;
+use function Concise\Middleware\Factory\create as createMiddleware;
 
 class MiddlewareFactoryTest extends TestCase
 {

@@ -12,17 +12,17 @@
     },
     "autoload": {
         "psr-4": {
-            "SuperServer\\": "src/SuperServer"
+            "Concise\\": "src/Concise"
         },
         "files": [
-            "src/SuperServer/FP/functions.php",
-            "src/SuperServer/Http/request.php",
-            "src/SuperServer/Http/response.php",
-            "src/SuperServer/Http/session.php",
-            "src/SuperServer/Middleware/factory.php",
-            "src/SuperServer/app.php",
-            "src/SuperServer/routing.php",
-            "src/SuperServer/routeMatcher.php"
+            "src/Concise/FP/functions.php",
+            "src/Concise/Http/request.php",
+            "src/Concise/Http/response.php",
+            "src/Concise/Http/session.php",
+            "src/Concise/Middleware/factory.php",
+            "src/Concise/app.php",
+            "src/Concise/routing.php",
+            "src/Concise/routeMatcher.php"
         ]
     },
     "require-dev": {

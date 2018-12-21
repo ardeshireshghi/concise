@@ -1,10 +1,10 @@
 <?php
 
-namespace SuperServer\Routing;
+namespace Concise\Routing;
 
-use function SuperServer\FP\curry;
-use function SuperServer\FP\reduce;
-use function SuperServer\FP\map;
+use function Concise\FP\curry;
+use function Concise\FP\reduce;
+use function Concise\FP\map;
 
 function routeParamsPattern()
 {
@@ -79,5 +79,5 @@ function matchRouteAgainstPath($route, $requestPath)
 
 function route(...$thisArgs)
 {
-  return call_user_func_array(curry('SuperServer\Routing\routeInternal'), $thisArgs);
+  return call_user_func_array(curry('Concise\Routing\routeInternal'), $thisArgs);
 }

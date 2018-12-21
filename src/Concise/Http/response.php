@@ -1,6 +1,6 @@
 <?php
 
-namespace SuperServer\Http\Response;
+namespace Concise\Http\Response;
 
 function response($data)
 {

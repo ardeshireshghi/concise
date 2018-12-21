@@ -1,15 +1,15 @@
 <?php
 
-namespace SuperServer\RouteMatcher;
+namespace Concise\RouteMatcher;
 
-use function SuperServer\Http\Request\path;
-use function SuperServer\Http\Request\method as reqMethod;
-use function SuperServer\Routing\routeSegments;
-use function SuperServer\Routing\matchRouteAgainstPath;
-use function SuperServer\FP\compose;
-use function SuperServer\FP\filter;
-use function SuperServer\FP\allPass;
-use function SuperServer\FP\somePass;
+use function Concise\Http\Request\path;
+use function Concise\Http\Request\method as reqMethod;
+use function Concise\Routing\routeSegments;
+use function Concise\Routing\matchRouteAgainstPath;
+use function Concise\FP\compose;
+use function Concise\FP\filter;
+use function Concise\FP\allPass;
+use function Concise\FP\somePass;
 
 const REGEX_MIN_ARRAY_COUNT_WHEN_MATCH = 2;
 

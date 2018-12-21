@@ -1,6 +1,6 @@
 <?php
 
-namespace SuperServer\FP;
+namespace Concise\FP;
 
 const CURRY_PLACEHOLDER = 'curry_placeholder';
 
