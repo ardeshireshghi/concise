@@ -14,13 +14,13 @@ add_to_path() {
   chmod u+x "$HOME/bin/composer"
 
   if [[ -f "$HOME/.zshrc" ]]; then
-    echo "PATH=\$PATH:$HOME/bin" >> "$HOME/.zshrc"
+    grep -q "$HOME/bin" "$HOME/.zshrc" || echo "export PATH=\"\$PATH:$HOME/bin\"" >> "$HOME/.zshrc"
     echo "Please: source ~/.zshrc"
   elif [[ -f "$HOME/.bashrc" ]]; then
-    echo "PATH=\$PATH:$HOME/bin" >> "$HOME/.bashrc"
+    grep -q "$HOME/bin" "$HOME/.bashrc" || echo "export PATH=\"\$PATH:$HOME/bin\"" >> "$HOME/.bashrc"
     echo "Please: source ~/.bashrc"
   elif [[ -f "$HOME/.bash_profile" ]]; then
-    echo "PATH=\$PATH:$HOME/bin" >> "$HOME/.bash_profile"
+    grep -q "$HOME/bin" "$HOME/.bash_profile" || echo "export PATH=\"\$PATH:$HOME/bin\"" >> "$HOME/.bash_profile"
     echo "Please: source ~/.bash_profile"
   fi
 }
