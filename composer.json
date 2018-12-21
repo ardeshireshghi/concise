@@ -2,6 +2,10 @@
     "require": {
         "phpunit/phpunit": "^7.5"
     },
+    "scripts": {
+        "start:web_api": "php -S 127.0.0.1:5000 examples/web-api/api.php",
+        "test": "./vendor/bin/phpunit --colors"
+    },
     "autoload": {
         "psr-4": {
             "SuperServer\\": "src/SuperServer"
@@ -10,6 +14,8 @@
             "src/SuperServer/FP/functions.php",
             "src/SuperServer/Http/request.php",
             "src/SuperServer/Http/response.php",
+            "src/SuperServer/Http/session.php",
+            "src/SuperServer/Middleware/factory.php",
             "src/SuperServer/app.php",
             "src/SuperServer/routing.php",
             "src/SuperServer/routeMatcher.php"
