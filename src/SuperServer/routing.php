@@ -77,7 +77,7 @@ function matchRouteAgainstPath($route, $requestPath)
   return $matches;
 }
 
-function route()
+function route(...$thisArgs)
 {
-  return call_user_func_array(curry('SuperServer\Routing\routeInternal'), func_get_args());
+  return call_user_func_array(curry('SuperServer\Routing\routeInternal'), $thisArgs);
 }

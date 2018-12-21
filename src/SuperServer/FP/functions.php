@@ -6,9 +6,8 @@ const CURRY_PLACEHOLDER = 'curry_placeholder';
 
 function partial(callable $fn, array $args)
 {
-  return function () use ($fn, $args) {
-    $mergedArgs = array_merge($args, func_get_args());
-    return call_user_func_array($fn, $mergedArgs);
+  return function (...$thisArgs) use ($fn, $args) {
+    return call_user_func_array($fn, array_merge($args, $thisArgs));
   };
 }
 
@@ -18,8 +17,7 @@ function curry(callable $fn, $arity = null)
   $args = $reflectionfn->getParameters();
   $currentArity = ($arity !== null) ? $arity : count($args);
 
-  $curryFunction = function () use ($currentArity, $fn) {
-    $thisArgs = func_get_args();
+  $curryFunction = function (...$thisArgs) use ($currentArity, $fn) {
     $argCount = count($thisArgs);
 
     // Call original function when arity matches
@@ -80,9 +78,9 @@ function reduce(callable $fn, $initialValue = [], array $data = null)
   return $curriedReduce($fn, $initialValue);
 }
 
-function compose()
+function compose(...$thisArgs)
 {
-  $fns = array_reverse(func_get_args());
+  $fns = array_reverse($thisArgs);
   return function ($data) use ($fns) {
     return reduce(function ($acc, $currentFn) {
       return $currentFn($acc);
@@ -90,7 +88,7 @@ function compose()
   };
 }
 
-function ifElse()
+function ifElse(...$thisArgs)
 {
   return call_user_func_array(curry(function ($conditionFn, $trueCallback, $falseCallback, $data) {
     if ($conditionFn($data)) {
@@ -98,21 +96,17 @@ function ifElse()
     } else {
       return $falseCallback($data);
     }
-  }), func_get_args());
+  }), $thisArgs);
 }
 
-function allPass()
+function allPass(...$thisArgs)
 {
-  $andFn = function () {
+  $andFn = function (...$andFnArgs) {
     $initialState = true;
     return reduce(function ($res, $conditionCanBeFn) {
-      return (is_callable($conditionCanBeFn)) ?
-    ($res && $conditionCanBeFn()) :
-    $res && ($conditionCanBeFn);
-    }, $initialState, func_get_args());
+      return (is_callable($conditionCanBeFn)) ? ($res && $conditionCanBeFn()) : $res && ($conditionCanBeFn);
+    }, $initialState, $andFnArgs);
   };
-
-  $thisArgs = func_get_args();
 
   // Return partial when only one arg is passed
   if (count($thisArgs) === 1) {
@@ -122,18 +116,16 @@ function allPass()
   return call_user_func_array($andFn, $thisArgs);
 }
 
-function somePass()
+function somePass(...$thisArgs)
 {
-  $orFn = function () {
+  $orFn = function (...$orFnArgs) {
     $initialState = false;
     return reduce(function ($res, $conditionCanBeFn) {
       return (is_callable($conditionCanBeFn)) ?
-    ($res || $conditionCanBeFn()) :
-    $res || $conditionCanBeFn;
-    }, $initialState, func_get_args());
+  ($res || $conditionCanBeFn()) :
+  $res || $conditionCanBeFn;
+    }, $initialState, $orFnArgs);
   };
-
-  $thisArgs = func_get_args();
 
   // Return partial when only one arg is passed
   if (count($thisArgs) === 1) {
