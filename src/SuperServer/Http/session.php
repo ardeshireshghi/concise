@@ -8,14 +8,16 @@ use function SuperServer\FP\ifElse;
 const DEFAULT_SESSION_NAME = 'super_server_fp_';
 const DEFAULT_SESSION_LIFETIME_SECONDS = 3600;
 
-function defaultConfig() {
+function defaultConfig()
+{
   return [
-    'lifetime'     => DEFAULT_SESSION_LIFETIME_SECONDS,
-    'session_name'  => DEFAULT_SESSION_NAME
+  'lifetime'     => DEFAULT_SESSION_LIFETIME_SECONDS,
+  'session_name'  => DEFAULT_SESSION_NAME
   ];
 }
 
-function initialise($config) {
+function initialise($config)
+{
   $config = (count($config) === 0) ? defaultConfig() : $config;
   if (!headers_sent()) {
     ini_set('session.name', $config['session_name']);
@@ -29,22 +31,24 @@ function initialise($config) {
   }
 }
 
-function middleware($middlewareConfig) {
-  return createMiddleware(function(array $config = array(), $params) {
+function middleware($middlewareConfig)
+{
+  return createMiddleware(function (array $config = array(), $params) {
     initialise($config);
     return $params;
   })($middlewareConfig);
 }
 
-function set(array $sessions = array()) {
-  return ifElse(function($sessions) {
+function set(array $sessions = array())
+{
+  return ifElse(function ($sessions) {
     return count($sessions) > 0;
-  })(function($sessions) {
-    array_walk($sessions, function($sessionValue, $sessionKey) {
+  })(function ($sessions) {
+    array_walk($sessions, function ($sessionValue, $sessionKey) {
       $_SESSION[$sessionKey] = $sessionValue;
     });
     return $_SESSION;
-  })(function() {
+  })(function () {
     return $_SESSION;
   })($sessions);
 }

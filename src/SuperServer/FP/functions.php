@@ -4,19 +4,21 @@ namespace SuperServer\FP;
 
 const CURRY_PLACEHOLDER = 'curry_placeholder';
 
-function partial(callable $fn, array $args) {
-  return function() use ($fn, $args) {
+function partial(callable $fn, array $args)
+{
+  return function () use ($fn, $args) {
     $mergedArgs = array_merge($args, func_get_args());
     return call_user_func_array($fn, $mergedArgs);
   };
 }
 
-function curry(callable $fn, $arity = null) {
+function curry(callable $fn, $arity = null)
+{
   $reflectionfn = new \ReflectionFunction($fn);
   $args = $reflectionfn->getParameters();
   $currentArity = ($arity !== null) ? $arity : count($args);
 
-  $curryFunction = function() use ($currentArity, $fn) {
+  $curryFunction = function () use ($currentArity, $fn) {
     $thisArgs = func_get_args();
     $argCount = count($thisArgs);
 
@@ -32,7 +34,8 @@ function curry(callable $fn, $arity = null) {
   return $curryFunction;
 }
 
-function map(callable $fn, array $data = null) {
+function map(callable $fn, array $data = null)
+{
   $handlerFn = 'array_map';
 
   if (is_array($data)) {
@@ -43,8 +46,9 @@ function map(callable $fn, array $data = null) {
   return $curriedMap($fn);
 }
 
-function filter(callable $fn, array $data = null) {
-  $handlerFn = function($fn, $data) {
+function filter(callable $fn, array $data = null)
+{
+  $handlerFn = function ($fn, $data) {
     return array_filter($data, $fn);
   };
 
@@ -56,8 +60,9 @@ function filter(callable $fn, array $data = null) {
   return $curriedFilter($fn);
 }
 
-function reduce(callable $fn, $initialValue = [], array $data = null) {
-  $handlerFn = function($fn, $initialValue, $data) {
+function reduce(callable $fn, $initialValue = [], array $data = null)
+{
+  $handlerFn = function ($fn, $initialValue, $data) {
     $acc = $initialValue;
 
     foreach ($data as $index => $value) {
@@ -75,17 +80,19 @@ function reduce(callable $fn, $initialValue = [], array $data = null) {
   return $curriedReduce($fn, $initialValue);
 }
 
-function compose() {
+function compose()
+{
   $fns = array_reverse(func_get_args());
-  return function($data) use ($fns) {
-    return reduce(function($acc, $currentFn) {
+  return function ($data) use ($fns) {
+    return reduce(function ($acc, $currentFn) {
       return $currentFn($acc);
     }, $data, $fns);
   };
 }
 
-function ifElse() {
-  return call_user_func_array(curry(function($conditionFn, $trueCallback, $falseCallback, $data) {
+function ifElse()
+{
+  return call_user_func_array(curry(function ($conditionFn, $trueCallback, $falseCallback, $data) {
     if ($conditionFn($data)) {
       return $trueCallback($data);
     } else {
@@ -94,13 +101,14 @@ function ifElse() {
   }), func_get_args());
 }
 
-function allPass() {
-  $andFn = function() {
+function allPass()
+{
+  $andFn = function () {
     $initialState = true;
-    return reduce(function($res, $conditionCanBeFn) {
+    return reduce(function ($res, $conditionCanBeFn) {
       return (is_callable($conditionCanBeFn)) ?
-      ($res && $conditionCanBeFn()) :
-        $res && ($conditionCanBeFn);
+    ($res && $conditionCanBeFn()) :
+    $res && ($conditionCanBeFn);
     }, $initialState, func_get_args());
   };
 
@@ -114,13 +122,14 @@ function allPass() {
   return call_user_func_array($andFn, $thisArgs);
 }
 
-function somePass() {
-  $orFn = function() {
+function somePass()
+{
+  $orFn = function () {
     $initialState = false;
-    return reduce(function($res, $conditionCanBeFn) {
+    return reduce(function ($res, $conditionCanBeFn) {
       return (is_callable($conditionCanBeFn)) ?
-        ($res || $conditionCanBeFn()) :
-        $res || $conditionCanBeFn;
+    ($res || $conditionCanBeFn()) :
+    $res || $conditionCanBeFn;
     }, $initialState, func_get_args());
   };
 

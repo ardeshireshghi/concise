@@ -13,28 +13,31 @@ use function SuperServer\FP\somePass;
 
 const REGEX_MIN_ARRAY_COUNT_WHEN_MATCH = 2;
 
-function routeWithNoParamMatchesPath($route, $regexResultMatches) {
+function routeWithNoParamMatchesPath($route, $regexResultMatches)
+{
   return allPass(
-    count($route['params']) === 0,
-    count($regexResultMatches) === 1,
-    count(explode('/', path())) <= count(routeSegments($route))
+  count($route['params']) === 0,
+  count($regexResultMatches) === 1,
+  count(explode('/', path())) <= count(routeSegments($route))
   );
 }
 
-function routeWithParamsMatchesPath($route, $regexResultMatches) {
+function routeWithParamsMatchesPath($route, $regexResultMatches)
+{
   return (count($regexResultMatches) >= REGEX_MIN_ARRAY_COUNT_WHEN_MATCH + count($route['params']));
 }
 
-function createRouteMatcherFilter() {
-  return filter(function($route) {
+function createRouteMatcherFilter()
+{
+  return filter(function ($route) {
     $regexResultMatches = matchRouteAgainstPath($route, path());
 
     return allPass(
-      $route['method'] === reqMethod(),
-      somePass(
-        routeWithNoParamMatchesPath($route, $regexResultMatches),
-        routeWithParamsMatchesPath($route, $regexResultMatches)
-      )
-    );
+    $route['method'] === reqMethod(),
+    somePass(
+    routeWithNoParamMatchesPath($route, $regexResultMatches),
+    routeWithParamsMatchesPath($route, $regexResultMatches)
+    )
+  );
   });
 }

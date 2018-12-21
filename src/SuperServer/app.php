@@ -11,45 +11,51 @@ use function SuperServer\FP\compose;
 use function SuperServer\FP\ifElse;
 use function SuperServer\RouteMatcher\createRouteMatcherFilter;
 
-function createMatchRouteChecker() {
-  return function($matchingRoutes) {
+function createMatchRouteChecker()
+{
+  return function ($matchingRoutes) {
     return count($matchingRoutes) > 0;
   };
 }
 
-function handlerWithDefaultMiddlewares($routeHandler) {
+function handlerWithDefaultMiddlewares($routeHandler)
+{
   return sessionMiddleware([])($routeHandler);
 }
 
-function createRouteHandlerInvoker() {
-  return function($matchingRoutes) {
+function createRouteHandlerInvoker()
+{
+  return function ($matchingRoutes) {
     // Pick the first matching route
     $handlerWithSessionMiddleware = handlerWithDefaultMiddlewares(current($matchingRoutes)['handler']);
     return $handlerWithSessionMiddleware(parseRouteParamsFromPath(current($matchingRoutes)));
   };
 }
 
-function createRouteNotFoundHandler() {
-  return function() {
+function createRouteNotFoundHandler()
+{
+  return function () {
     return response('Route for path: \"'.path().'\" not found');
   };
 }
 
-function createRouteHandler() {
-  return function($matchingRoutes) {
+function createRouteHandler()
+{
+  return function ($matchingRoutes) {
     return ifElse(
-      createMatchRouteChecker(),
-      createRouteHandlerInvoker(),
-      createRouteNotFoundHandler()
-    )($matchingRoutes);
+    createMatchRouteChecker(),
+    createRouteHandlerInvoker(),
+    createRouteNotFoundHandler()
+  )($matchingRoutes);
   };
 }
 
 
-function app($routes) {
+function app($routes)
+{
   return compose(
-    createRouteHandler(),
-    createRouteMatcherFilter(),
-    'array_values'
+  createRouteHandler(),
+  createRouteMatcherFilter(),
+  'array_values'
   )($routes);
 };

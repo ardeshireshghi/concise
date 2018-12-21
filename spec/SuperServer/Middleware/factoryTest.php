@@ -7,23 +7,23 @@ class MiddlewareFactoryTest extends TestCase
 {
   public function testCreateMiddleware()
   {
-    $middlewareFn = function(array $middlewareParams = array(), $params) {
+    $middlewareFn = function (array $middlewareParams = array(), $params) {
       return array_merge($params, [ 'middlewareName' => $middlewareParams['name'] ]);
     };
 
-    $routeHandler = function($params) {
+    $routeHandler = function ($params) {
       return array_merge($params, [ 'response' => 'someresponse' ]);
     };
 
     $middlewareParams = [
-      'name' => 'testmiddleware'
-    ];
+    'name' => 'testmiddleware'
+  ];
 
     $expectedRouteResponse = [
-      'id' => 'somevalue',
-      'middlewareName' => 'testmiddleware',
-      'response' => 'someresponse'
-    ];
+    'id' => 'somevalue',
+    'middlewareName' => 'testmiddleware',
+    'response' => 'someresponse'
+  ];
 
     $middleware = createMiddleware($middlewareFn);
     $handlerWithMiddleware = $middleware($middlewareParams)($routeHandler);
@@ -32,5 +32,3 @@ class MiddlewareFactoryTest extends TestCase
     $this->assertEquals($expectedRouteResponse, $handlerWithMiddleware(['id' => 'somevalue']));
   }
 }
-
-?>

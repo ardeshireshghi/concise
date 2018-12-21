@@ -8,20 +8,20 @@ class SessionTest extends TestCase
 {
   public function testSessionMiddleware()
   {
-    $routeHandler = function($params) {
+    $routeHandler = function ($params) {
       return array_merge($params, [ 'routehandler_sideeffect' => 'someresponse' ]);
     };
 
     $expectedRouteResponse = [
-      'id' => 'somevalue',
-      'routehandler_sideeffect' => 'someresponse'
-    ];
+    'id' => 'somevalue',
+    'routehandler_sideeffect' => 'someresponse'
+  ];
 
     $middlewareConfig = [
-      'session_name'  => 'super_server_fp_',
-      'lifetime'      => 3600,
-      'save_path'     => '/tmp'
-    ];
+    'session_name'  => 'super_server_fp_',
+    'lifetime'      => 3600,
+    'save_path'     => '/tmp'
+  ];
 
     $handlerWithSessionMiddleware = sessionMiddleware($middlewareConfig)($routeHandler);
 
@@ -32,18 +32,16 @@ class SessionTest extends TestCase
   public function testSetSession()
   {
     $_SESSION = [
-      'name' => 'somename'
-    ];
+    'name' => 'somename'
+  ];
 
     $newSession = setSession([
-      'auth' => 'sometoken'
-    ]);
+    'auth' => 'sometoken'
+  ]);
 
     $this->assertEquals([
-      'name'  => 'somename',
-      'auth' => 'sometoken'
-    ], $newSession);
+    'name'  => 'somename',
+    'auth' => 'sometoken'
+  ], $newSession);
   }
 }
-
-?>

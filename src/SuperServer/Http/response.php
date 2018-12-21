@@ -2,6 +2,7 @@
 
 namespace SuperServer\Http\Response;
 
-function response($data) {
+function response($data)
+{
   echo $data;
 }
