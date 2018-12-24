@@ -4,7 +4,7 @@ ConcisePHP is a PHP micro-framework that makes creating powerful web application
 
 ### Prerequisites
 
-You need PHP 7.0.0 in order to use Concise.
+You need PHP with version higher than 7 in order to use Concise.
 
 ```
 PHP >7.0.0

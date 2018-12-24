@@ -12,14 +12,39 @@ function spy(callable $fn, &$callArgs, &$callCounter)
   };
 }
 
+function appMockRoutes()
+{
+  return [
+    [
+      'method'  => 'POST',
+      'pattern' => '/api/user',
+      'handler' => function () {
+      },
+      'regex'    => '/\/api\/user/',
+      'params'   => []
+    ],
+    [
+      'method' => 'GET',
+      'pattern' => '/api/user/:id',
+      'handler' => function () {
+      },
+      'regex'   => '/\/api\/user\/(?<id>[\w\-]+)/',
+      'params'   => ['id']
+    ],
+    [
+      'method' => 'PUT',
+      'pattern' => '/api/user/:id',
+      'handler' => function () {
+      },
+      'regex'   => '/\/api\/user\/(?<id>[\w\-]+)/',
+      'params'   => ['id']
+    ]
+  ];
+}
+
 class AppTest extends TestCase
 {
-  public function testAppExist()
-  {
-    $this->assertTrue(function_exists('Concise\app'));
-  }
-
-  public function testAppRouteHandlerCalled()
+  public function testAppRouteHandlerCalledWhenRouteExists()
   {
     $_SERVER['HTTP_HOST']= 'google.com';
     $_SERVER['REQUEST_URI']= '/api/user/20';
@@ -30,39 +55,18 @@ class AppTest extends TestCase
     $deleteHandlerSpy = spy(function () {
     }, $handlerCallArgs, $deleteHandlercallCount);
 
-    app([
-      [
-        'method'  => 'POST',
-        'pattern' => '/api/user',
-        'handler' => function () {
-        },
-        'regex'    => '/\/api\/user/',
-        'params'   => []
-      ],
-      [
-        'method' => 'GET',
-        'pattern' => '/api/user/:id',
-        'handler' => function () {
-        },
-        'regex'   => '/\/api\/user\/(?<id>[\w\-]+)/',
-        'params'   => ['id']
-      ],
+    $routes = appMockRoutes();
+    $deleteUserRoute = [
       [
         'method' => 'DELETE',
         'pattern' => '/api/user/:id',
         'handler' => $deleteHandlerSpy,
         'regex'   => '/\/api\/user\/(?<id>[\w\-]+)/',
         'params'   => ['id']
-      ],
-      [
-        'method' => 'PUT',
-        'pattern' => '/api/user/:id',
-        'handler' => function () {
-        },
-        'regex'   => '/\/api\/user\/(?<id>[\w\-]+)/',
-        'params'   => ['id']
       ]
-    ]);
+    ];
+
+    app(array_merge($routes, $deleteUserRoute));
 
     $handlerFirstCallFirstArg = $handlerCallArgs[0][0];
 
@@ -70,5 +74,29 @@ class AppTest extends TestCase
     $this->assertEquals([
       'id' => '20'
     ], $handlerFirstCallFirstArg);
+  }
+
+  public function testAppRouteNotFound()
+  {
+    $_SERVER['HTTP_HOST']= 'google.com';
+    $_SERVER['REQUEST_URI']= '/not/found/100';
+    $_SERVER['REQUEST_METHOD'] = 'POST';
+
+    $expectedOutputBody = 'Route for path: \"/not/found/100\" not found';
+    $app = app();
+
+    ob_start();
+    $response = $app(appMockRoutes());
+    $output = ob_get_clean();
+
+    $this->assertEquals([
+      'headers' => [
+        'Content-Type' => 'text/html'
+      ],
+      'body' =>  $expectedOutputBody,
+      'status' => 404
+    ], $response);
+
+    $this->assertEquals($expectedOutputBody, $output);
   }
 }

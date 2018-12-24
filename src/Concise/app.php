@@ -3,9 +3,11 @@
 namespace Concise;
 
 use function Concise\Http\Request\url;
-use function Concise\Http\Request\path;
+use function Concise\Http\Request\rawPath;
 use function Concise\Http\Request\parseRouteParamsFromPath;
 use function Concise\Http\Response\response;
+use function Concise\Http\Response\statusCode;
+use function Concise\Http\Response\send;
 use function Concise\Http\Session\middleware as sessionMiddleware;
 use function Concise\FP\compose;
 use function Concise\FP\ifElse;
@@ -36,7 +38,7 @@ function createRouteHandlerInvoker()
 function createRouteNotFoundHandler()
 {
   return function () {
-    return response('Route for path: \"'.path().'\" not found');
+    return send(response('Route for path: "'.rawPath().'" not found')(statusCode(404, [])));
   };
 }
 
@@ -51,7 +53,8 @@ function createRouteHandler()
   };
 }
 
-function app($routes)
+function app(array $routes = [])
 {
-  return compose(createRouteHandler(), createRouteMatcherFilter(), 'array_values')($routes);
+  $app = compose(createRouteHandler(), createRouteMatcherFilter(), 'array_values');
+  return count($routes) > 0 ? $app($routes) : $app;
 };

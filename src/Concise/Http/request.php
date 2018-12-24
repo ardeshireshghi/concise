@@ -12,7 +12,12 @@ function url()
 
 function path()
 {
-  return rtrim(parse_url(url(), PHP_URL_PATH), URL_TRIM_CHAR);
+  return rtrim(rawPath(), URL_TRIM_CHAR);
+}
+
+function rawPath()
+{
+  return parse_url(url(), PHP_URL_PATH);
 }
 
 function method()
