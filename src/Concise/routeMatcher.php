@@ -6,7 +6,6 @@ use function Concise\Http\Request\path;
 use function Concise\Http\Request\method as reqMethod;
 use function Concise\Routing\routeSegments;
 use function Concise\Routing\matchRouteAgainstPath;
-use function Concise\FP\compose;
 use function Concise\FP\filter;
 use function Concise\FP\allPass;
 use function Concise\FP\somePass;
@@ -33,11 +32,11 @@ function createRouteMatcherFilter()
     $regexResultMatches = matchRouteAgainstPath($route, path());
 
     return allPass(
-    $route['method'] === reqMethod(),
-    somePass(
-    routeWithNoParamMatchesPath($route, $regexResultMatches),
-    routeWithParamsMatchesPath($route, $regexResultMatches)
-    )
+  $route['method'] === reqMethod(),
+  somePass(
+  routeWithNoParamMatchesPath($route, $regexResultMatches),
+  routeWithParamsMatchesPath($route, $regexResultMatches)
+  )
   );
   });
 }

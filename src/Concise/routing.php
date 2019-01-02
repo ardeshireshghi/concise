@@ -79,5 +79,55 @@ function matchRouteAgainstPath($route, $requestPath)
 
 function route(...$thisArgs)
 {
-  return call_user_func_array(curry('Concise\Routing\routeInternal'), $thisArgs);
+  return curry('Concise\Routing\routeInternal')(...$thisArgs);
+}
+
+function post(...$thisArgs)
+{
+  return route('POST')(...$thisArgs);
+}
+
+function put(...$thisArgs)
+{
+  return route('PUT')(...$thisArgs);
+}
+
+function get(...$thisArgs)
+{
+  return route('GET')(...$thisArgs);
+}
+
+function delete(...$thisArgs)
+{
+  return route('DELETE')(...$thisArgs);
+}
+
+function head(...$thisArgs)
+{
+  return route('HEAD')(...$thisArgs);
+}
+
+function patch(...$thisArgs)
+{
+  return route('PATCH')(...$thisArgs);
+}
+
+function purge(...$thisArgs)
+{
+  return route('PURGE')(...$thisArgs);
+}
+
+function options(...$thisArgs)
+{
+  return route('OPTIONS')(...$thisArgs);
+}
+
+function trace(...$thisArgs)
+{
+  return route('TRACE')(...$thisArgs);
+}
+
+function connect(...$thisArgs)
+{
+  return route('CONNECT')(...$thisArgs);
 }

@@ -34,10 +34,10 @@ function createWrappedRouteHandlerInvoker(array $middlewares = [])
     // Pick the first matching route
     $routeHandler = current($matchingRoutes)['handler'];
     $routeHandlerWrapped = (count($middlewares) === 0) ?
-    $routeHandler :
-    reduce(function ($handlerWrapped, $currentMiddleware) {
-      return $currentMiddleware($handlerWrapped)([]);
-    }, $routeHandler, array_reverse($middlewares));
+  $routeHandler :
+  reduce(function ($handlerWrapped, $currentMiddleware) {
+    return $currentMiddleware($handlerWrapped)([]);
+  }, $routeHandler, array_reverse($middlewares));
 
     $handlerWithSessionMiddleware = handlerWithDefaultMiddlewares($routeHandlerWrapped);
     return $handlerWithSessionMiddleware(parseRouteParamsFromPath(current($matchingRoutes)));

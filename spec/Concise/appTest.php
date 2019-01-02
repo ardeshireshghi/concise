@@ -45,7 +45,8 @@ class AppTest extends TestCase
 
     $deleteHandlercallCount = 0;
     $handlerCallArgs = [];
-    $deleteHandlerSpy = (new Spy())->setFunction(function () {});
+    $deleteHandlerSpy = (new Spy())->setFunction(function () {
+    });
 
     $routes = appMockRoutes();
     $deleteUserRoute = [
@@ -138,7 +139,8 @@ class AppTest extends TestCase
       [
         'method' => 'DELETE',
         'pattern' => '/api/user/:id/orders/:order_id',
-        'handler' => function () {},
+        'handler' => function () {
+        },
         'regex'   => '/\/api\/user\/(?<id>[\w\-]+)\/orders\/(?<order_id>[\w\-]+)/',
         'params'   => ['id']
       ]
@@ -166,12 +168,12 @@ class AppTest extends TestCase
       'order_id' => '100'
     ];
 
-    $firstMiddlewareHandler = (new Spy())->setFunction(function (callable $nextRouteHandler, array $middlewareParams = array(), array $reqParams = array())
-    {
+    $firstMiddlewareHandler = (new Spy())->setFunction(function (callable $nextRouteHandler, array $middlewareParams = array(), array $reqParams = array()) {
       return $nextRouteHandler($reqParams);
     });
 
-    $secondMiddlewareHandler = (new Spy())->setFunction(function (){});
+    $secondMiddlewareHandler = (new Spy())->setFunction(function () {
+    });
 
     $firstMockMiddleware = createMiddleware($firstMiddlewareHandler['spy']);
     $secondMockMiddleware = createMiddleware($secondMiddlewareHandler['spy']);
@@ -181,7 +183,8 @@ class AppTest extends TestCase
       [
         'method' => 'DELETE',
         'pattern' => '/api/user/:id/orders/:order_id',
-        'handler' => function () {},
+        'handler' => function () {
+        },
         'regex'   => '/\/api\/user\/(?<id>[\w\-]+)\/orders\/(?<order_id>[\w\-]+)/',
         'params'   => ['id']
       ]
@@ -193,7 +196,7 @@ class AppTest extends TestCase
     $secondMiddlewareFirstCallThirdArg = $secondMiddlewareHandler->getCall(0)[2];
 
     $this->assertEquals(1, $firstMiddlewareHandler->callCount(), 'should call the first middleware once');
-    $this->assertEquals(1, $secondMiddlewareHandler->callCount(),  'should call the second middleware once');
+    $this->assertEquals(1, $secondMiddlewareHandler->callCount(), 'should call the second middleware once');
     $this->assertEquals($expectedParams, $firstMiddlewareFirstCallThirdArg, 'should call the first middleware with correct params');
     $this->assertEquals($expectedParams, $secondMiddlewareFirstCallThirdArg, 'should call the second middleware with correct params');
   }
