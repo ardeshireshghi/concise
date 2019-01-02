@@ -36,8 +36,6 @@ function _createStatusCode()
   };
 }
 
-
-
 function _sendResponse($responseContext)
 {
   ob_start();
