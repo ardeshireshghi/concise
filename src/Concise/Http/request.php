@@ -1,6 +1,7 @@
 <?php
 
 namespace Concise\Http\Request;
+use function Concise\FP\filter;
 
 const URL_TRIM_CHAR = '/';
 
@@ -28,5 +29,7 @@ function method()
 function parseRouteParamsFromPath($route)
 {
   preg_match($route['regex'], path(), $params);
-  return array_diff_key($params, [0 => true, 1 => true]);
+  return filter(function($paramValue, $paramKey) {
+    return (!is_int($paramKey));
+  }, $params);
 }

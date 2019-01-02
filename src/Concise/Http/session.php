@@ -33,9 +33,9 @@ function initialise($config)
 
 function middlewareHandler()
 {
-  return function (callable $routeHandler, array $middlewareParams = array(), array $reqParams = array()) {
+  return function (callable $nextRouteHandler, array $middlewareParams = array(), array $reqParams = array()) {
     initialise($middlewareParams);
-    return $routeHandler($reqParams);
+    return $nextRouteHandler($reqParams);
   };
 }
 

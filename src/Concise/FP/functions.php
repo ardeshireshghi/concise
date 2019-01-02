@@ -47,7 +47,7 @@ function map(callable $fn, array $data = null)
 function filter(callable $fn, array $data = null)
 {
   $handlerFn = function ($fn, $data) {
-    return array_filter($data, $fn);
+    return array_filter($data, $fn, ARRAY_FILTER_USE_BOTH);
   };
 
   if (is_array($data)) {
