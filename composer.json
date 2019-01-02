@@ -12,7 +12,8 @@
     },
     "autoload": {
         "psr-4": {
-            "Concise\\": "src/Concise"
+            "Concise\\": "src/Concise",
+            "TestUtils\\": "spec/TestUtils"
         },
         "files": [
             "src/Concise/FP/functions.php",
