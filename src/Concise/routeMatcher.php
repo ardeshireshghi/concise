@@ -32,10 +32,12 @@ function createRouteMatcherFilter()
   return filter(function ($route) {
     $regexResultMatches = matchRouteAgainstPath($route, path());
 
-    return allPass($route['method'] === reqMethod(),
-      somePass(
-        routeWithNoParamMatchesPath($route, $regexResultMatches),
-        routeWithParamsMatchesPath($route, $regexResultMatches)
-      ));
+    return allPass(
+    $route['method'] === reqMethod(),
+    somePass(
+    routeWithNoParamMatchesPath($route, $regexResultMatches),
+    routeWithParamsMatchesPath($route, $regexResultMatches)
+    )
+  );
   });
 }

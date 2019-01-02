@@ -30,15 +30,14 @@ function handlerWithDefaultMiddlewares($routeHandler)
 
 function createWrappedRouteHandlerInvoker(array $middlewares = [])
 {
-  return function ($matchingRoutes) use ($middlewares)
-  {
+  return function ($matchingRoutes) use ($middlewares) {
     // Pick the first matching route
     $routeHandler = current($matchingRoutes)['handler'];
     $routeHandlerWrapped = (count($middlewares) === 0) ?
-      $routeHandler :
-      reduce(function ($handlerWrapped, $currentMiddleware) {
-        return $currentMiddleware($handlerWrapped)([]);
-      }, $routeHandler, array_reverse($middlewares));
+    $routeHandler :
+    reduce(function ($handlerWrapped, $currentMiddleware) {
+      return $currentMiddleware($handlerWrapped)([]);
+    }, $routeHandler, array_reverse($middlewares));
 
     $handlerWithSessionMiddleware = handlerWithDefaultMiddlewares($routeHandlerWrapped);
     return $handlerWithSessionMiddleware(parseRouteParamsFromPath(current($matchingRoutes)));
@@ -52,28 +51,26 @@ function createRouteNotFoundHandler(array $middlewares = [])
   };
 
   return (count($middlewares) === 0) ?
-    $notFoundHandler :
-    reduce(function ($handlerWrapped, $currentMiddleware) {
-      return $currentMiddleware($handlerWrapped)([]);
-    }, $notFoundHandler, array_reverse($middlewares));
+  $notFoundHandler :
+  reduce(function ($handlerWrapped, $currentMiddleware) {
+    return $currentMiddleware($handlerWrapped)([]);
+  }, $notFoundHandler, array_reverse($middlewares));
 }
 
 function createRouteHandler(array $middlewares = [])
 {
-  return function ($matchingRoutes) use ($middlewares)
-  {
+  return function ($matchingRoutes) use ($middlewares) {
     return ifElse(
-    createMatchRouteChecker(),
-    createWrappedRouteHandlerInvoker($middlewares),
-    createRouteNotFoundHandler($middlewares)
-    )($matchingRoutes);
+  createMatchRouteChecker(),
+  createWrappedRouteHandlerInvoker($middlewares),
+  createRouteNotFoundHandler($middlewares)
+  )($matchingRoutes);
   };
 }
 
 function createApp()
 {
-  return function (array $routes, array $middlewares = [])
-  {
+  return function (array $routes, array $middlewares = []) {
     return compose(createRouteHandler($middlewares), createRouteMatcherFilter(), 'array_values')($routes);
   };
 }

@@ -8,13 +8,11 @@ class FPTest extends TestCase
 {
   public function testTryCatchNotThrowing()
   {
-    $tryer = function (array $data = [])
-    {
+    $tryer = function (array $data = []) {
       return $data['x'];
     };
 
-    $catcher = function()
-    {
+    $catcher = function () {
       return false;
     };
 
@@ -23,13 +21,11 @@ class FPTest extends TestCase
 
   public function testTryCatchThrowingError()
   {
-    $tryer = function (array $data = [])
-    {
+    $tryer = function (array $data = []) {
       return not_exist_function('fdfds');
     };
 
-    $catcher = function(\Error $e)
-    {
+    $catcher = function (\Error $e) {
       return $e->getMessage();
     };
 

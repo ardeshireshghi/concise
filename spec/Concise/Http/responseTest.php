@@ -65,7 +65,7 @@ class ResponseTest extends TestCase
     $cacheControl = setHeader('Cache-Control');
 
     $result = send(
-    statusCode(201)(response(json_encode(['name' => 'bob']))($cacheControl('public, max-age=31536000')($contentType('application/json', []))))
+  statusCode(201)(response(json_encode(['name' => 'bob']))($cacheControl('public, max-age=31536000')($contentType('application/json', []))))
   );
 
     $output = ob_get_clean();

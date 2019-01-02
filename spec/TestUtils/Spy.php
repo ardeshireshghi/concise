@@ -12,8 +12,7 @@ class Spy extends \ArrayObject
     $this->fnToInvoke = $fn;
     $instance = $this;
 
-    $this['spy'] = function (...$thisArgs) use ($instance)
-    {
+    $this['spy'] = function (...$thisArgs) use ($instance) {
       $instance->_calls[] = $thisArgs;
       $instance->_callCount += 1;
       $fnToCall = $instance->fnToInvoke;

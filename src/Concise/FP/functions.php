@@ -140,9 +140,9 @@ function tryCatch(...$thisArgs)
   return call_user_func_array(curry(_createTryCatch()), $thisArgs);
 }
 
-function _createTryCatch() {
-  return function (callable $tryer, callable $catcher, ...$thisArgs)
-  {
+function _createTryCatch()
+{
+  return function (callable $tryer, callable $catcher, ...$thisArgs) {
     try {
       return $tryer(...$thisArgs);
     } catch (\Error $e) {

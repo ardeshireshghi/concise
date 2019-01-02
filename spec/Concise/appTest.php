@@ -5,11 +5,6 @@ use TestUtils\Spy;
 use function Concise\app as app;
 use function Concise\Middleware\Factory\create as createMiddleware;
 
-function spy()
-{
-  return new Spy();
-}
-
 function appMockRoutes()
 {
   return [
