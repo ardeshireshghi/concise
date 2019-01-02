@@ -1,3 +1,5 @@
+<img src="https://raw.githubusercontent.com/ardeshireshghi/concise/master/images/logo.png" width="400" alt="Concise">
+
 # Concise: Functional micro web framework in PHP
 
 ConcisePHP is a PHP micro-framework that makes creating powerful web applications and APIs seemless.
@@ -30,14 +32,16 @@ Create `app.php` file and add the following content:
 require './vendor/autoload.php';
 
 use function Concise\app;
-use function Concise\Routing\route;
+use function Concise\Routing\get;
 use function Concise\Http\Response\response;
 
+$middlewares = [];
+
 app([
-  route('GET', '/welcome/:name', function ($params) {
+  get('/welcome/:name')(function ($params) {
     return response('Welcome to Concise, ' . $params['name']);
-  })
-]);
+  }))
+])($middlewares);
 
 ```
 
@@ -75,3 +79,5 @@ This project is licensed under the MIT License - see the [LICENSE.md](LICENSE.md
 ## Acknowledgments
 
 * This framework/library is inspired by functional language frameworks like Clojure [Ring](https://github.com/ring-clojure/ring)
+
+* Many of the functional language helper functions are inspired by JS Rambda library [Rambda](https://ramdajs.com/docs/)
