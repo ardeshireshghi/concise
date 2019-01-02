@@ -29,18 +29,42 @@ Create `app.php` file and add the following content:
 ```
 <?php
 
+<?php
+
 require './vendor/autoload.php';
 
 use function Concise\app;
 use function Concise\Routing\get;
 use function Concise\Http\Response\response;
+use function Concise\Http\Response\send;
+use function Concise\Http\Request\url;
+use function Concise\Http\Request\path;
+use function Concise\Middleware\Factory\create as createMiddleware;
 
-$middlewares = [];
+$loggerMiddleware = createMiddleware(function (callable $nextRouteHandler, array $middlewareParams = [], array $routeParams = []) {
+  $outputFileHandler = fopen('php://stdout', 'w');
+  $logger = function(string $message) use ($outputFileHandler)
+  {
+    fwrite($outputFileHandler, $message);
+  };
+
+  if ($routeParams) {
+    $logger('Route with path'.path().' matching. Params are: '.implode(',', $routeParams)."\n");
+  } else {
+    $logger("No route matching for: ".url(). "\n");
+  }
+
+  return $nextRouteHandler($routeParams);
+});
+
+$middlewares = [
+  $loggerMiddleware
+];
 
 app([
   get('/welcome/:name')(function ($params) {
-    return response('Welcome to Concise, ' . $params['name']);
-  }))
+    return send(response('Welcome to Concise, ' . $params['name'], []));
+  })
 ])($middlewares);
 
 ```
