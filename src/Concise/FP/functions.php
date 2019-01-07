@@ -2,8 +2,6 @@
 
 namespace Concise\FP;
 
-const CURRY_PLACEHOLDER = 'curry_placeholder';
-
 function partial(callable $fn, array $args)
 {
   return function (...$thisArgs) use ($fn, $args) {

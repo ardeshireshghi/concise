@@ -9,7 +9,6 @@ use function Concise\Routing\post;
 use function Concise\Http\Response\response;
 use function Concise\Http\Request\path as requestPath;
 use function Concise\Http\Response\setHeader;
-use function Concise\Http\Response\sta;
 use function Concise\Http\Response\send;
 use function Concise\Http\Response\statusCode;
 use function Concise\Http\Session\set as setSession;
@@ -99,6 +98,6 @@ app([
       ]), [])));
     })($request['body']));
   })
-], [
+])([
   $authMiddleware
 ]);

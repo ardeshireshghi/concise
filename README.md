@@ -19,7 +19,7 @@ A step by step series of examples that tell you how to get a development env run
 Say what the step will be
 
 ```
-composer require ardeshireshghi/concise:*
+composer require ardeshireshghi/concise:0.3.1
 ```
 
 ### Usage (Hello world)
@@ -39,31 +39,45 @@ use function Concise\Http\Request\url;
 use function Concise\Http\Request\path;
 use function Concise\Middleware\Factory\create as createMiddleware;
 
-$loggerMiddleware = createMiddleware(function (callable $nextRouteHandler, array $middlewareParams = [], array $request = []) {
-  $outputFileHandler = fopen('php://stdout', 'w');
-  $logger = function(string $message) use ($outputFileHandler)
-  {
-    fwrite($outputFileHandler, $message);
-  };
+function getLogger()
+{
+  static $logger = null;
+  if (!$logger) {
+    $outputFileHandler = fopen('php://stdout', 'w');
+    $logger = function (string $message) use ($outputFileHandler) {
+      fwrite($outputFileHandler, $message);
+    };
+  }
 
-  if ($routeParams) {
-    $logger('Route with path'.path().' matching. Params are: '.implode(',', $routeParams)."\n");
+  return $logger;
+}
+
+$loggerMiddleware = createMiddleware(function (callable $nextRouteHandler, array $middlewareParams = [], array $request = []) {
+  $logger = getLogger();
+
+  $logger("\n\nRequest: ".json_encode($request));
+  if (count($request['params']) > 0) {
+    $logger('Route with path'.path().' matching. Params are: '.implode(',', $request['params'])."\n");
   } else {
-    $logger("No route matching for: ".url(). "\n");
+    $logger("\nNo route matching for: ".url(). "\n");
   }
 
   return $nextRouteHandler($request);
 });
 
+$routes = [
+  get('/hello/:name')(function ($request) {
+    return send(response('Welcome to Concise, ' . $request['params']['name'], []));
+  })
+];
+
 $middlewares = [
   $loggerMiddleware
 ];
 
-app([
-  get('/hello/:name')(function ($params) {
-    return send(response('Welcome to Concise, ' . $request['params']['name'], []));
-  })
-])($middlewares);
+// App returns the response object and we log it
+getLogger()('Response: '.json_encode(app($routes)($middlewares)));
+
 
 ```
 
