@@ -1,6 +1,6 @@
 {
     "name": "ardeshireshghi/concise",
-    "version": "0.2.1",
+    "version": "0.3.0",
     "require": {
         "php": ">7.1.0"
     },
@@ -20,6 +20,7 @@
             "src/Concise/Http/request.php",
             "src/Concise/Http/response.php",
             "src/Concise/Http/session.php",
+            "src/Concise/Http/adapters.php",
             "src/Concise/Middleware/factory.php",
             "src/Concise/app.php",
             "src/Concise/routing.php",

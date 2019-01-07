@@ -7,6 +7,12 @@ class Spy extends \ArrayObject
   private $_callCount = 0;
   private $_calls = [];
 
+  public static function create(callable $fn = null)
+  {
+    return (new static())->setFunction(is_null($fn) ? function () {
+    } : $fn);
+  }
+
   public function setFunction(callable $fn)
   {
     $this->fnToInvoke = $fn;

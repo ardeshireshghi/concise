@@ -145,7 +145,7 @@ function _createTryCatch()
   return function (callable $tryer, callable $catcher, ...$thisArgs) {
     try {
       return $tryer(...$thisArgs);
-    } catch (\Error $e) {
+    } catch (\Throwable $e) {
       return $catcher($e);
     }
   };

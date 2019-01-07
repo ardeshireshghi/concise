@@ -4,7 +4,7 @@ namespace Concise;
 
 use function Concise\Http\Request\url;
 use function Concise\Http\Request\rawPath;
-use function Concise\Http\Request\parseRouteParamsFromPath;
+use function Concise\Http\Adapter\request as requestAdapter;
 use function Concise\Http\Response\response;
 use function Concise\Http\Response\statusCode;
 use function Concise\Http\Response\send;
@@ -32,15 +32,14 @@ function createWrappedRouteHandlerInvoker(array $middlewares = [])
 {
   return function ($matchingRoutes) use ($middlewares) {
     // Pick the first matching route
-    $routeHandler = current($matchingRoutes)['handler'];
     $routeHandlerWrapped = (count($middlewares) === 0) ?
-  $routeHandler :
-  reduce(function ($handlerWrapped, $currentMiddleware) {
-    return $currentMiddleware($handlerWrapped)([]);
-  }, $routeHandler, array_reverse($middlewares));
+  current($matchingRoutes)['handler'] :
+    reduce(function ($handlerWrapped, $currentMiddleware) {
+      return $currentMiddleware($handlerWrapped)([]);
+    }, current($matchingRoutes)['handler'], array_reverse($middlewares));
 
     $handlerWithSessionMiddleware = handlerWithDefaultMiddlewares($routeHandlerWrapped);
-    return $handlerWithSessionMiddleware(parseRouteParamsFromPath(current($matchingRoutes)));
+    return $handlerWithSessionMiddleware(requestAdapter(current($matchingRoutes)));
   };
 }
 

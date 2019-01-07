@@ -29,8 +29,6 @@ Create `app.php` file and add the following content:
 ```
 <?php
 
-<?php
-
 require './vendor/autoload.php';
 
 use function Concise\app;
@@ -41,7 +39,7 @@ use function Concise\Http\Request\url;
 use function Concise\Http\Request\path;
 use function Concise\Middleware\Factory\create as createMiddleware;
 
-$loggerMiddleware = createMiddleware(function (callable $nextRouteHandler, array $middlewareParams = [], array $routeParams = []) {
+$loggerMiddleware = createMiddleware(function (callable $nextRouteHandler, array $middlewareParams = [], array $request = []) {
   $outputFileHandler = fopen('php://stdout', 'w');
   $logger = function(string $message) use ($outputFileHandler)
   {
@@ -54,7 +52,7 @@ $loggerMiddleware = createMiddleware(function (callable $nextRouteHandler, array
     $logger("No route matching for: ".url(). "\n");
   }
 
-  return $nextRouteHandler($routeParams);
+  return $nextRouteHandler($request);
 });
 
 $middlewares = [
@@ -62,8 +60,8 @@ $middlewares = [
 ];
 
 app([
-  get('/welcome/:name')(function ($params) {
-    return send(response('Welcome to Concise, ' . $params['name'], []));
+  get('/hello/:name')(function ($params) {
+    return send(response('Welcome to Concise, ' . $request['params']['name'], []));
   })
 ])($middlewares);
 
@@ -75,7 +73,7 @@ And try to run it using PHP server:
 $ php -S localhost:5000 app.php
 ```
 
-Going to http://localhost:5000/welcome/coder will now display "Welcome to Concise, coder".
+Going to http://localhost:5000/hello/coder will now display "Welcome to Concise, coder".
 
 There is also an example API script in `/examples/web-api/api.php`.
 
