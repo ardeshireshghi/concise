@@ -8,8 +8,8 @@ class SessionTest extends TestCase
 {
   public function testSessionMiddleware()
   {
-    $routeHandler = function ($params) {
-      return array_merge($params, [ 'routehandler_sideeffect' => 'someresponse' ]);
+    $routeHandler = function ($request) {
+      return array_merge($request, [ 'routehandler_sideeffect' => 'someresponse' ]);
     };
 
     $expectedRouteResponse = [

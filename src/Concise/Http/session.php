@@ -11,7 +11,7 @@ const DEFAULT_SESSION_LIFETIME_SECONDS = 3600;
 function defaultConfig()
 {
   return [
-    'lifetime'     => DEFAULT_SESSION_LIFETIME_SECONDS,
+    'lifetime'      => DEFAULT_SESSION_LIFETIME_SECONDS,
     'session_name'  => DEFAULT_SESSION_NAME
   ];
 }
@@ -33,15 +33,15 @@ function initialise($config)
 
 function middlewareHandler()
 {
-  return function (callable $nextRouteHandler, array $middlewareParams = array(), array $reqParams = array()) {
+  return function (callable $nextRouteHandler, $middlewareParams, array $request = array()) {
     initialise($middlewareParams);
-    return $nextRouteHandler($reqParams);
+    return $nextRouteHandler($request);
   };
 }
 
-function middleware($routeHandler)
+function middleware(...$thisArgs)
 {
-  return createMiddleware(middlewareHandler())($routeHandler);
+  return createMiddleware(middlewareHandler())(...$thisArgs);
 }
 
 function set(array $sessions = array())

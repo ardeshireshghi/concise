@@ -9,6 +9,7 @@ use function Concise\Http\Response\response;
 use function Concise\Http\Response\statusCode;
 use function Concise\Http\Response\send;
 use function Concise\Http\Session\middleware as sessionMiddleware;
+use function Concise\Middleware\Reducer\combine as combineMiddlewares;
 use function Concise\FP\compose;
 use function Concise\FP\curry;
 use function Concise\FP\reduce;
@@ -22,48 +23,36 @@ function createMatchRouteChecker()
   };
 }
 
-function handlerWithDefaultMiddlewares($routeHandler)
-{
-  $sessionMiddlewareParams = [];
-  return sessionMiddleware($routeHandler)($sessionMiddlewareParams);
-}
-
 function createWrappedRouteHandlerInvoker(array $middlewares = [])
 {
   return function ($matchingRoutes) use ($middlewares) {
-    // Pick the first matching route
-    $routeHandlerWrapped = (count($middlewares) === 0) ?
-  current($matchingRoutes)['handler'] :
-    reduce(function ($handlerWrapped, $currentMiddleware) {
-      return $currentMiddleware($handlerWrapped)([]);
-    }, current($matchingRoutes)['handler'], array_reverse($middlewares));
-
-    $handlerWithSessionMiddleware = handlerWithDefaultMiddlewares($routeHandlerWrapped);
-    return $handlerWithSessionMiddleware(requestAdapter(current($matchingRoutes)));
+    return combineMiddlewares(current($matchingRoutes)['handler'])(array_reverse(
+      array_merge([
+        sessionMiddleware()
+      ], $middlewares)
+    ))(requestAdapter(current($matchingRoutes)));
   };
 }
 
 function createRouteNotFoundHandler(array $middlewares = [])
 {
-  $notFoundHandler = function () {
-    return send(response('Route for path: "'.rawPath().'" not found')(statusCode(404, [])));
-  };
+  return function () use ($middlewares) {
+    $notFoundHandler = function () {
+      return send(response('Route for path: "'.rawPath().'" not found')(statusCode(404, [])));
+    };
 
-  return (count($middlewares) === 0) ?
-  $notFoundHandler :
-  reduce(function ($handlerWrapped, $currentMiddleware) {
-    return $currentMiddleware($handlerWrapped)([]);
-  }, $notFoundHandler, array_reverse($middlewares));
+    return combineMiddlewares($notFoundHandler)(array_reverse(
+      array_merge([
+        sessionMiddleware()
+      ], $middlewares)
+    ))(requestAdapter());
+  };
 }
 
 function createRouteHandler(array $middlewares = [])
 {
   return function ($matchingRoutes) use ($middlewares) {
-    return ifElse(
-  createMatchRouteChecker(),
-  createWrappedRouteHandlerInvoker($middlewares),
-  createRouteNotFoundHandler($middlewares)
-  )($matchingRoutes);
+    return ifElse(createMatchRouteChecker(), createWrappedRouteHandlerInvoker($middlewares), createRouteNotFoundHandler($middlewares))($matchingRoutes);
   };
 }
 

@@ -1,3 +1,8 @@
+* 0.3.1
+
+- Improve the combined wrapped middleware logic (middleware reducer)
+
+
 * 0.3.0
 
 - Introduce route handler request array which replaces route params. It includes:

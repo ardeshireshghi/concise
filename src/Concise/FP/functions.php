@@ -58,9 +58,9 @@ function filter(callable $fn, array $data = null)
   return $curriedFilter($fn);
 }
 
-function reduce(callable $fn, $initialValue = [], array $data = null)
+function reduce(...$thisArgs)
 {
-  $handlerFn = function ($fn, $initialValue, $data) {
+  $handlerFn = function ($fn, $initialValue, array $data = []) {
     $acc = $initialValue;
 
     foreach ($data as $index => $value) {
@@ -70,12 +70,7 @@ function reduce(callable $fn, $initialValue = [], array $data = null)
     return $acc;
   };
 
-  if (is_array($data)) {
-    return $handlerFn($fn, $initialValue, $data);
-  }
-
-  $curriedReduce = curry($handlerFn);
-  return $curriedReduce($fn, $initialValue);
+  return curry($handlerFn)(...$thisArgs);
 }
 
 function compose(...$thisArgs)

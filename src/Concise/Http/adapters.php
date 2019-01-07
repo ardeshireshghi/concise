@@ -10,10 +10,10 @@ function parseBody()
   return $_POST;
 }
 
-function request($matchingRoute)
+function request(array $matchingRoute = null)
 {
   return [
-    'params' => parseRouteParamsFromPath($matchingRoute),
+    'params' => is_null($matchingRoute) ? [] : parseRouteParamsFromPath($matchingRoute),
     'query'  => $_GET,
     'body'   => parseBody(),
     'method' => method()

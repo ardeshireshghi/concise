@@ -70,4 +70,24 @@ class AdaptersTest extends TestCase
       'method' => 'POST'
     ], $request);
   }
+
+  public function testNoRouteQueryParams()
+  {
+    $_SERVER['HTTP_HOST']= 'localhost';
+    $_SERVER['REQUEST_URI']= '/api/not/found';
+    $_SERVER['REQUEST_METHOD'] = 'GET';
+
+    $_GET['type'] = 'latest';
+
+    $request = requestAdapter();
+
+    $this->assertEquals([
+      'params' => [],
+      'body' => [],
+      'query' => [
+        'type' => 'latest'
+      ],
+      'method' => 'GET'
+    ], $request);
+  }
 }
