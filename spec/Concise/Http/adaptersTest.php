@@ -2,6 +2,7 @@
 
 use PHPUnit\Framework\TestCase;
 use function Concise\Http\Adapter\request as requestAdapter;
+use TestUtils\RawRequestBody;
 
 class AdaptersTest extends TestCase
 {
@@ -11,6 +12,7 @@ class AdaptersTest extends TestCase
 
     $_POST = [];
     $_GET = [];
+    $_SERVER['CONTENT_TYPE'] = null;
   }
 
   public function testGetRequestNoQueryparam()
@@ -40,11 +42,13 @@ class AdaptersTest extends TestCase
     ], $request);
   }
 
-  public function testPostRequestWithBody()
+  public function testPostRequestWithUrlEncodedBody()
   {
     $_SERVER['HTTP_HOST']= 'localhost';
     $_SERVER['REQUEST_URI']= '/api/user';
     $_SERVER['REQUEST_METHOD'] = 'POST';
+
+    $_SERVER['CONTENT_TYPE'] = 'application/x-www-form-urlencoded';
 
     $_POST['name'] = 'Ardi';
     $_POST['tel'] = '+44183840304';
@@ -70,6 +74,116 @@ class AdaptersTest extends TestCase
       'method' => 'POST'
     ], $request);
   }
+
+  public function testPostRequestContentTypeJson()
+  {
+    $_SERVER['HTTP_HOST']= 'localhost';
+    $_SERVER['REQUEST_URI']= '/api/user';
+    $_SERVER['REQUEST_METHOD'] = 'POST';
+
+    $_SERVER['CONTENT_TYPE'] = 'application/json';
+
+    $rawBody = new RawRequestBody(json_encode([
+      'name' => 'Ardi',
+      'tel'  => '+44183840304'
+    ]));
+
+    $postMockRoute = [
+      'method' => 'POST',
+      'pattern' => '/api/user',
+      'regex'   => '/\/api\/user/',
+      'params'   => [],
+      'handler' => function () {
+      }
+    ];
+
+    $request = requestAdapter($postMockRoute);
+
+    $this->assertEquals([
+      'params' => [],
+      'query' => [],
+      'body' => [
+        'name' => 'Ardi',
+        'tel' => '+44183840304'
+      ],
+      'method' => 'POST'
+    ], $request);
+
+    $rawBody->empty();
+  }
+
+  public function testPostRequestJsonPayload()
+  {
+    $_SERVER['HTTP_HOST']= 'localhost';
+    $_SERVER['REQUEST_URI']= '/api/user';
+    $_SERVER['REQUEST_METHOD'] = 'POST';
+
+    $_SERVER['CONTENT_TYPE'] = 'text/plain';
+
+    $rawBody = new RawRequestBody(json_encode([
+      'name' => 'Ardi',
+      'tel'  => '+44183840304'
+    ]));
+
+    $postMockRoute = [
+      'method' => 'POST',
+      'pattern' => '/api/user',
+      'regex'   => '/\/api\/user/',
+      'params'   => [],
+      'handler' => function () {
+      }
+    ];
+
+    $request = requestAdapter($postMockRoute);
+
+    $this->assertEquals([
+      'params' => [],
+      'query' => [],
+      'body' => [
+        'name' => 'Ardi',
+        'tel' => '+44183840304'
+      ],
+      'method' => 'POST'
+    ], $request);
+
+    $rawBody->empty();
+  }
+
+  public function testPostRequestRawBody()
+  {
+    $_SERVER['HTTP_HOST']= 'localhost';
+    $_SERVER['REQUEST_URI']= '/api/data';
+    $_SERVER['REQUEST_METHOD'] = 'POST';
+
+    $_SERVER['CONTENT_TYPE'] = 'text/plain';
+
+    $mockBody = <<<'EOF'
+This is the payload of the request
+EOF;
+
+    $rawBody = new RawRequestBody($mockBody);
+
+    $postMockRoute = [
+      'method' => 'POST',
+      'pattern' => '/api/data',
+      'regex'   => '/\/api\/data/',
+      'params'   => [],
+      'handler' => function () {
+      }
+    ];
+
+    $request = requestAdapter($postMockRoute);
+
+    $this->assertEquals([
+      'params' => [],
+      'query' => [],
+      'body' => $mockBody,
+      'method' => 'POST'
+    ], $request);
+
+    $rawBody->empty();
+  }
+
 
   public function testNoRouteQueryParams()
   {

@@ -6,6 +6,19 @@ use function Concise\FP\filter;
 
 const URL_TRIM_CHAR = '/';
 
+const CONTENT_TYPES = [
+  'multipart'   => 'multipart/form-data',
+  'urlencoded'  => 'application/x-www-form-urlencoded',
+  'json'        => 'application/json'
+];
+
+
+function isJson($string)
+{
+  json_decode($string, true);
+  return (json_last_error() == JSON_ERROR_NONE);
+}
+
 function url()
 {
   return (isset($_SERVER['HTTPS']) &&
@@ -25,6 +38,11 @@ function rawPath()
 function method()
 {
   return $_SERVER['REQUEST_METHOD'];
+}
+
+function contentType()
+{
+  return isset($_SERVER['CONTENT_TYPE']) ? $_SERVER['CONTENT_TYPE'] : null;
 }
 
 function parseRouteParamsFromPath($route)

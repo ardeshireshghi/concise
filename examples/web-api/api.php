@@ -69,9 +69,12 @@ app([
     ]), [])));
   }),
 
-  route('POST', '/api/upload', function () {
+  route('POST', '/api/upload', function (array $request) {
     return send(setHeader('Content-Type', 'application/json')(response(json_encode([
-      'route' => 'upload',
+      'route'   => 'upload',
+      'data'    => [
+        'filename' => isset($request['body']['filename']) ? $request['body']['filename'] : ''
+      ],
       'message' => 'Can upload your files'
     ]), [])));
   }),

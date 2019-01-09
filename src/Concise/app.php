@@ -27,10 +27,10 @@ function createWrappedRouteHandlerInvoker(array $middlewares = [])
 {
   return function ($matchingRoutes) use ($middlewares) {
     return combineMiddlewares(current($matchingRoutes)['handler'])(array_reverse(
-      array_merge([
-        sessionMiddleware()
-      ], $middlewares)
-    ))(requestAdapter(current($matchingRoutes)));
+    array_merge([
+      sessionMiddleware()
+    ], $middlewares)
+  ))(requestAdapter(current($matchingRoutes)));
   };
 }
 
@@ -42,10 +42,10 @@ function createRouteNotFoundHandler(array $middlewares = [])
     };
 
     return combineMiddlewares($notFoundHandler)(array_reverse(
-      array_merge([
-        sessionMiddleware()
-      ], $middlewares)
-    ))(requestAdapter());
+    array_merge([
+      sessionMiddleware()
+    ], $middlewares)
+  ))(requestAdapter());
   };
 }
 

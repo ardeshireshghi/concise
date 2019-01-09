@@ -1,6 +1,6 @@
 {
     "name": "ardeshireshghi/concise",
-    "version": "0.3.1",
+    "version": "0.3.2",
     "require": {
         "php": ">7.1.0"
     },

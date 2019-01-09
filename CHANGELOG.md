@@ -1,3 +1,8 @@
+* 0.3.2
+
+- Add body parsing logic to request adapter (raw, json, form-data and url-encoded)
+- Update App example app and README example
+
 * 0.3.1
 
 - Improve the combined wrapped middleware logic (middleware reducer)

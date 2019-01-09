@@ -6,11 +6,13 @@ ConcisePHP is a PHP micro-framework that makes creating powerful web application
 
 ### Prerequisites
 
-You need PHP with version higher than 7 in order to use Concise.
+You need PHP with version equal or higher than 7.1 in order to use Concise.
 
 ```
-PHP >7.0.0
+PHP >7.1
 ```
+
+On Linux make sure `xml` and `mbstring` PHP modules are installed as well.
 
 ### Installation
 
@@ -57,7 +59,7 @@ $loggerMiddleware = createMiddleware(function (callable $nextRouteHandler, array
 
   $logger("\n\nRequest: ".json_encode($request));
   if (count($request['params']) > 0) {
-    $logger('Route with path'.path().' matching. Params are: '.implode(',', $request['params'])."\n");
+    $logger("\nRoute with path".path().' matching. Params are: '.implode(',', $request['params'])."\n");
   } else {
     $logger("\nNo route matching for: ".url(). "\n");
   }
@@ -75,10 +77,7 @@ $middlewares = [
   $loggerMiddleware
 ];
 
-// App returns the response object and we log it
-getLogger()('Response: '.json_encode(app($routes)($middlewares)));
-
-
+getLogger()('Response: '.json_encode(app($routes)($middlewares))."\n");
 ```
 
 And try to run it using PHP server:
@@ -89,14 +88,36 @@ $ php -S localhost:5000 app.php
 
 Going to http://localhost:5000/hello/coder will now display "Welcome to Concise, coder".
 
-There is also an example API script in `/examples/web-api/api.php`.
 
-## Tests
+## Development
+
+### Installation
+
+```bash
+$ composer install
+```
+
+### Testing
 
 To execute the test suite, you'll need phpunit.
 
 ```bash
 $ phpunit --colors
+```
+
+### Example Web Api script
+
+There is also an example API script in `/examples/web-api/api.php`. After cloning the repo, you can run it with:
+
+```bash
+$ composer run-script start:web_api --timeout 0
+```
+
+Use the following to test both the `authMiddleware` and parsing of JSON payload:
+
+```bash
+curl -X POST -H 'Authorization: Bearer abcd1234efgh5678' -H 'Content-Type: application/json' --data '{"filename": "test.jpg"}' http://127.0.0.1:5000/api/upload
+
 ```
 
 ## Contributing
