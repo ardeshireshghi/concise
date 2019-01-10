@@ -1,3 +1,8 @@
+* 0.3.3
+
+- Move HTTP response `send` logic to responseAdapter to make it internal
+- Remove `send` from tests, example app and README example
+
 * 0.3.2
 
 - Add body parsing logic to request adapter (raw, json, form-data and url-encoded)

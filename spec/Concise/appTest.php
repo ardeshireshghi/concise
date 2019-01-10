@@ -6,7 +6,6 @@ use function Concise\app as app;
 use function Concise\Middleware\Factory\create as createMiddleware;
 use function Concise\Http\Response\response;
 use function Concise\Http\Response\statusCode;
-use function Concise\Http\Response\send;
 
 function appMockRoutes()
 {
@@ -63,7 +62,9 @@ class AppTest extends TestCase
       'body' => []
     ];
 
-    $deleteHandlerSpy = Spy::create();
+    $deleteHandlerSpy = Spy::create(function () {
+      return response('delete done', []);
+    });
 
     $routes = appMockRoutes();
     $deleteUserRoute = [
@@ -152,7 +153,9 @@ class AppTest extends TestCase
       'body' => []
     ];
 
-    $middlewareHandlerSpy = Spy::create();
+    $middlewareHandlerSpy = Spy::create(function($nextHandler, $middlewareParams, $request) {
+      return $nextHandler($request);
+    });
 
     $mockMiddleware = createMiddleware($middlewareHandlerSpy['spy']);
 
@@ -161,7 +164,8 @@ class AppTest extends TestCase
       [
         'method' => 'DELETE',
         'pattern' => '/api/user/:id/orders/:order_id',
-        'handler' => function () {
+        'handler' => function ($request) {
+          return response('some response', []);
         },
         'regex'   => '/\/api\/user\/(?<id>[\w\-]+)\/orders\/(?<order_id>[\w\-]+)/',
         'params'   => ['id']
@@ -201,7 +205,7 @@ class AppTest extends TestCase
     });
 
     $routeHandler = Spy::create(function (array $request) {
-      return send(response('OK')(statusCode(201, [])));
+      return response('OK')(statusCode(201, []));
     });
 
     $firstMockMiddleware = createMiddleware($firstMiddlewareHandler['spy']);

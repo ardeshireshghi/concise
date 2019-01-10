@@ -5,9 +5,9 @@ namespace Concise;
 use function Concise\Http\Request\url;
 use function Concise\Http\Request\rawPath;
 use function Concise\Http\Adapter\request as requestAdapter;
+use function Concise\Http\Adapter\response as responseAdapter;
 use function Concise\Http\Response\response;
 use function Concise\Http\Response\statusCode;
-use function Concise\Http\Response\send;
 use function Concise\Http\Session\middleware as sessionMiddleware;
 use function Concise\Middleware\Reducer\combine as combineMiddlewares;
 use function Concise\FP\compose;
@@ -26,11 +26,11 @@ function createMatchRouteChecker()
 function createWrappedRouteHandlerInvoker(array $middlewares = [])
 {
   return function ($matchingRoutes) use ($middlewares) {
-    return combineMiddlewares(current($matchingRoutes)['handler'])(array_reverse(
-    array_merge([
-      sessionMiddleware()
-    ], $middlewares)
-  ))(requestAdapter(current($matchingRoutes)));
+    return responseAdapter(combineMiddlewares(current($matchingRoutes)['handler'])(array_reverse(
+      array_merge([
+        sessionMiddleware()
+      ], $middlewares)
+    ))(requestAdapter(current($matchingRoutes))));
   };
 }
 
@@ -38,14 +38,14 @@ function createRouteNotFoundHandler(array $middlewares = [])
 {
   return function () use ($middlewares) {
     $notFoundHandler = function () {
-      return send(response('Route for path: "'.rawPath().'" not found')(statusCode(404, [])));
+      return response('Route for path: "'.rawPath().'" not found')(statusCode(404, []));
     };
 
-    return combineMiddlewares($notFoundHandler)(array_reverse(
-    array_merge([
-      sessionMiddleware()
-    ], $middlewares)
-  ))(requestAdapter());
+    return responseAdapter(combineMiddlewares($notFoundHandler)(array_reverse(
+      array_merge([
+        sessionMiddleware()
+      ], $middlewares)
+    ))(requestAdapter()));
   };
 }
 

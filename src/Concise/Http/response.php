@@ -16,11 +16,6 @@ function setHeader(...$thisArgs)
   return call_user_func_array(curry(_createSetHeader()), $thisArgs);
 }
 
-function send($responseContext)
-{
-  return compose('Concise\Http\Response\_sendResponse', 'Concise\Http\Response\_sendHeaders')($responseContext);
-}
-
 function statusCode(...$thisArgs)
 {
   return call_user_func_array(curry(_createStatusCode()), $thisArgs);
@@ -34,31 +29,6 @@ function _createStatusCode()
       'status' => $code
     ]);
   };
-}
-
-function _sendResponse($responseContext)
-{
-  ob_start();
-  echo $responseContext['body'];
-  ob_end_flush();
-  return $responseContext;
-}
-
-function _sendHeaders($responseContext)
-{
-  if (headers_sent()) {
-    return $responseContext;
-  }
-  ob_start();
-
-  $statusCode = (isset($responseContext['status'])) ? $responseContext['status'] : 200;
-
-  http_response_code($statusCode);
-  array_walk($responseContext['headers'], function ($value, $name) use ($responseContext, $statusCode) {
-    header("$name: $value", false, $statusCode);
-  });
-
-  return $responseContext;
 }
 
 function defaultResponseContext()

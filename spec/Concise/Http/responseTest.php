@@ -19,21 +19,6 @@ class ResponseTest extends TestCase
     ], $result);
   }
 
-  public function testSend()
-  {
-    ob_start();
-    $result = send(response('Show some output', []));
-    $output = ob_get_clean();
-
-    $this->assertEquals('Show some output', $output);
-    $this->assertEquals([
-      'headers' => [
-        'Content-Type' => 'text/html'
-      ],
-      'body' => 'Show some output'
-    ], $result);
-  }
-
   public function testSetHeader()
   {
     $result = setHeader('Content-Type', 'application/json', []);
@@ -59,18 +44,11 @@ class ResponseTest extends TestCase
 
   public function testSetResponseWithSetHeaderAndSend()
   {
-    ob_start();
-
     $contentType = setHeader('Content-Type');
     $cacheControl = setHeader('Cache-Control');
 
-    $result = send(
-  statusCode(201)(response(json_encode(['name' => 'bob']))($cacheControl('public, max-age=31536000')($contentType('application/json', []))))
-  );
+    $result = statusCode(201)(response(json_encode(['name' => 'bob']))($cacheControl('public, max-age=31536000')($contentType('application/json', []))));
 
-    $output = ob_get_clean();
-
-    $this->assertEquals('{"name":"bob"}', $output);
     $this->assertEquals([
       'headers' => [
         'Content-Type' => 'application/json',

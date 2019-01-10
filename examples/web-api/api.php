@@ -9,7 +9,6 @@ use function Concise\Routing\post;
 use function Concise\Http\Response\response;
 use function Concise\Http\Request\path as requestPath;
 use function Concise\Http\Response\setHeader;
-use function Concise\Http\Response\send;
 use function Concise\Http\Response\statusCode;
 use function Concise\Http\Session\set as setSession;
 use function Concise\FP\ifElse;
@@ -33,11 +32,11 @@ function authorizer($nextRouteHandler)
     }
     return $nextRouteHandler($request);
   }, function (\Exception $error) {
-    return send(setHeader('Content-Type', 'application/json')(response(json_encode([
+    return setHeader('Content-Type', 'application/json')(response(json_encode([
       'error' => true,
       'status' => 401,
       'message' => $error->getMessage()
-    ]))(statusCode(401, []))));
+    ]))(statusCode(401, [])));
   });
 }
 
@@ -56,38 +55,38 @@ $authMiddleware = createMiddleware(function (callable $nextRouteHandler, array $
 
 app([
   route('GET', '/home', function () {
-    return send(setHeader('Content-Type', 'application/json')(response(json_encode([
+    return setHeader('Content-Type', 'application/json')(response(json_encode([
       'route' => 'home',
       'message' => 'hello mate'
-    ]), [])));
+    ]), []));
   }),
 
   route('GET', '/api/user/:id', function (array $request) {
-    return send(setHeader('Content-Type', 'application/json')(response(json_encode([
+    return setHeader('Content-Type', 'application/json')(response(json_encode([
       'route' => '/api/user',
       'data'  => [ 'user' => [ 'id' => $request['params']['id'] ] ]
-    ]), [])));
+    ]), []));
   }),
 
   route('POST', '/api/upload', function (array $request) {
-    return send(setHeader('Content-Type', 'application/json')(response(json_encode([
+    return setHeader('Content-Type', 'application/json')(response(json_encode([
       'route'   => 'upload',
       'data'    => [
         'filename' => isset($request['body']['filename']) ? $request['body']['filename'] : ''
       ],
       'message' => 'Can upload your files'
-    ]), [])));
+    ]), []));
   }),
 
   route('GET', '/api/upload/:upload_id', function (array $request) {
-    return send(setHeader('Content-Type', 'application/json')(response(json_encode([
+    return setHeader('Content-Type', 'application/json')(response(json_encode([
       'route' => 'GET upload with ID',
       'data'  => [ 'user' => [ 'upload_id' => $request['params']['upload_id'] ] ]
-    ]), [])));
+    ]), []));
   }),
 
   post('/api/auth/login')(function (array $request) {
-    return send(ifElse(function ($body) {
+    return ifElse(function ($body) {
       return isset($body['password']) && $body['password'] === 'V3ryS3cur3Passw0rd';
     })(function () {
       return setHeader('Content-Type', 'application/json')(response(json_encode([
@@ -99,7 +98,7 @@ app([
         'error'   => true,
         'message' => 'Invalid password'
       ]), [])));
-    })($request['body']));
+    })($request['body']);
   })
 ])([
   $authMiddleware
