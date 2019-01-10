@@ -9,6 +9,7 @@ use function Concise\Http\Request\method;
 use function Concise\Http\Request\isJson;
 use function Concise\Http\Request\contentType;
 use function Concise\FP\ifElse;
+use function Concise\FP\compose;
 
 function parseBody()
 {
@@ -33,4 +34,34 @@ function request(array $matchingRoute = null)
     'body'   => parseBody(),
     'method' => method()
   ];
+}
+
+function response(array $responseContext = [])
+{
+  return compose('Concise\Http\Adapter\_sendBody', 'Concise\Http\Adapter\_sendHeaders')($responseContext);
+}
+
+function _sendBody($responseContext)
+{
+  ob_start();
+  echo $responseContext['body'];
+  ob_end_flush();
+  return $responseContext;
+}
+
+function _sendHeaders($responseContext)
+{
+  if (headers_sent()) {
+    return $responseContext;
+  }
+  ob_start();
+
+  $statusCode = (isset($responseContext['status'])) ? $responseContext['status'] : 200;
+
+  http_response_code($statusCode);
+  array_walk($responseContext['headers'], function ($value, $name) use ($responseContext, $statusCode) {
+    header("$name: $value", false, $statusCode);
+  });
+
+  return $responseContext;
 }

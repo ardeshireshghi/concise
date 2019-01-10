@@ -4,7 +4,7 @@ use PHPUnit\Framework\TestCase;
 use function Concise\Http\Adapter\request as requestAdapter;
 use TestUtils\RawRequestBody;
 
-class AdaptersTest extends TestCase
+class RequestAdapterTest extends TestCase
 {
   public function setup()
   {

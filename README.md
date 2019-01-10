@@ -36,7 +36,6 @@ require './vendor/autoload.php';
 use function Concise\app;
 use function Concise\Routing\get;
 use function Concise\Http\Response\response;
-use function Concise\Http\Response\send;
 use function Concise\Http\Request\url;
 use function Concise\Http\Request\path;
 use function Concise\Middleware\Factory\create as createMiddleware;
@@ -69,7 +68,7 @@ $loggerMiddleware = createMiddleware(function (callable $nextRouteHandler, array
 
 $routes = [
   get('/hello/:name')(function ($request) {
-    return send(response('Welcome to Concise, ' . $request['params']['name'], []));
+    return response('Welcome to Concise, ' . $request['params']['name'], []);
   })
 ];
 
