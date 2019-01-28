@@ -8,6 +8,7 @@ use function Concise\Http\Request\parseRouteParamsFromPath;
 use function Concise\Http\Request\method;
 use function Concise\Http\Request\isJson;
 use function Concise\Http\Request\contentType;
+use function Concise\Http\Request\headers;
 use function Concise\FP\ifElse;
 use function Concise\FP\compose;
 
@@ -29,10 +30,11 @@ function parseBody()
 function request(array $matchingRoute = null)
 {
   return [
-    'params' => is_null($matchingRoute) ? [] : parseRouteParamsFromPath($matchingRoute),
-    'query'  => $_GET,
-    'body'   => parseBody(),
-    'method' => method()
+    'params'  => is_null($matchingRoute) ? [] : parseRouteParamsFromPath($matchingRoute),
+    'query'   => $_GET,
+    'body'    => parseBody(),
+    'method'  => method(),
+    'headers' => headers()
   ];
 }
 

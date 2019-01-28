@@ -22,7 +22,12 @@ function isJson($string)
 function url()
 {
   return (isset($_SERVER['HTTPS']) &&
-  $_SERVER['HTTPS'] === 'on' ? "https" : "http")."://$_SERVER[HTTP_HOST]$_SERVER[REQUEST_URI]";
+  $_SERVER['HTTPS'] === 'on' ? "https" : "http").'://'.host()."$_SERVER[REQUEST_URI]";
+}
+
+function host()
+{
+  return isset($_SERVER['HTTP_X_FORWARDED_HOST']) ? $_SERVER['HTTP_X_FORWARDED_HOST'] : $_SERVER['HTTP_HOST'];
 }
 
 function path()
@@ -51,4 +56,9 @@ function parseRouteParamsFromPath($route)
   return filter(function ($paramValue, $paramKey) {
     return (!is_int($paramKey));
   }, $params);
+}
+
+function headers()
+{
+  return getallheaders();
 }

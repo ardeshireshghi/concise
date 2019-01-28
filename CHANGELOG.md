@@ -1,4 +1,10 @@
 * 0.3.3
+* 0.4.0
+
+- Add `headers` to request using `getallheaders` or the polyfill
+- Update tests and add tests for `Concise\Http\Request`
+
+* 0.3.3
 
 - Move HTTP response `send` logic to responseAdapter to make it internal
 - Remove `send` from tests, example app and README example

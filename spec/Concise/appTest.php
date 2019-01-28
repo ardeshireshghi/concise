@@ -45,6 +45,13 @@ class AppTest extends TestCase
 
     $_POST = [];
     $_GET = [];
+
+    unset(
+      $_SERVER['CONTENT_LENGTH'],
+      $_SERVER['CONTENT_TYPE'],
+      $_SERVER['HTTP_CONNECTION'],
+      $_SERVER['HTTP_KEEP_ALIVE']
+    );
   }
 
   public function testAppRouteHandlerCalledWhenRouteExists()
@@ -59,7 +66,10 @@ class AppTest extends TestCase
       ],
       'method' => 'DELETE',
       'query' => [],
-      'body' => []
+      'body' => [],
+      'headers' => [
+        'Host' => 'google.com'
+      ]
     ];
 
     $deleteHandlerSpy = Spy::create(function () {
@@ -150,7 +160,10 @@ class AppTest extends TestCase
       ],
       'method' => 'DELETE',
       'query' => [],
-      'body' => []
+      'body' => [],
+      'headers' => [
+        'Host' => 'google.com'
+      ]
     ];
 
     $middlewareHandlerSpy = Spy::create(function($nextHandler, $middlewareParams, $request) {
@@ -193,7 +206,10 @@ class AppTest extends TestCase
       ],
       'method' => 'DELETE',
       'query' => [],
-      'body' => []
+      'body' => [],
+      'headers' => [
+        'Host' => 'google.com'
+      ]
     ];
 
     $firstMiddlewareHandler = Spy::create(function (callable $nextRouteHandler, array $middlewareParams = array(), array $request = array()) {

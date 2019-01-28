@@ -38,7 +38,11 @@ class RequestAdapterTest extends TestCase
       ],
       'query' => [],
       'body' => [],
-      'method' => 'GET'
+      'method' => 'GET',
+      'headers' => [
+        'Host' => 'localhost',
+        'Content-Type' => null
+      ]
     ], $request);
   }
 
@@ -71,7 +75,11 @@ class RequestAdapterTest extends TestCase
         'name' => 'Ardi',
         'tel' => '+44183840304'
       ],
-      'method' => 'POST'
+      'method' => 'POST',
+      'headers' => [
+        'Host' => 'localhost',
+        'Content-Type' => 'application/x-www-form-urlencoded'
+      ]
     ], $request);
   }
 
@@ -106,7 +114,11 @@ class RequestAdapterTest extends TestCase
         'name' => 'Ardi',
         'tel' => '+44183840304'
       ],
-      'method' => 'POST'
+      'method' => 'POST',
+      'headers' => [
+        'Host' => 'localhost',
+        'Content-Type' => 'application/json'
+      ]
     ], $request);
 
     $rawBody->empty();
@@ -143,7 +155,11 @@ class RequestAdapterTest extends TestCase
         'name' => 'Ardi',
         'tel' => '+44183840304'
       ],
-      'method' => 'POST'
+      'method' => 'POST',
+      'headers' => [
+        'Host' => 'localhost',
+        'Content-Type' => 'text/plain'
+      ]
     ], $request);
 
     $rawBody->empty();
@@ -178,7 +194,11 @@ EOF;
       'params' => [],
       'query' => [],
       'body' => $mockBody,
-      'method' => 'POST'
+      'method' => 'POST',
+      'headers' => [
+        'Host' => 'localhost',
+        'Content-Type' => 'text/plain'
+      ]
     ], $request);
 
     $rawBody->empty();
@@ -201,7 +221,11 @@ EOF;
       'query' => [
         'type' => 'latest'
       ],
-      'method' => 'GET'
+      'method' => 'GET',
+      'headers' => [
+        'Host' => 'localhost',
+        'Content-Type' => null
+      ]
     ], $request);
   }
 }
