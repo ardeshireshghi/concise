@@ -2,7 +2,7 @@
 
 # Concise: Functional micro web framework in PHP
 
-ConcisePHP is a PHP micro-framework that makes creating powerful web applications and APIs seemless.
+ConcisePHP is a PHP micro-framework that makes creating [fast](#benchmarking) and powerful Web applications and APIs seemless.
 
 ### Prerequisites
 
@@ -21,7 +21,7 @@ A step by step series of examples that tell you how to get a development env run
 Say what the step will be
 
 ```
-composer require ardeshireshghi/concise:0.3.3
+composer require ardeshireshghi/concise:0.4.0
 ```
 
 ### Usage (Hello world)
@@ -104,7 +104,7 @@ To execute the test suite, you'll need phpunit.
 $ phpunit --colors
 ```
 
-### Example Web Api script
+### Example Web API script
 
 There is also an example API script in `/examples/web-api/api.php`. After cloning the repo, you can run it with:
 
@@ -118,6 +118,125 @@ Use the following to test both the `authMiddleware` and parsing of JSON payload:
 curl -X POST -H 'Authorization: Bearer abcd1234efgh5678' -H 'Content-Type: application/json' --data '{"filename": "test.jpg"}' http://127.0.0.1:5000/api/upload
 
 ```
+## Benchmarking
+
+The benchmark is done on a 1 core cpu 2GB RAM Centos 7.5 cloud server on DigitalOcean after setting up Nginx with default config, php-fpm (PHP 7.3). The performance has been compared with Laravel, by disabling the Laravel middlewares in `Http/Kernel.php` and changing the home controller to just say 'Hello world'. Also using the above code example for `Concise` also without the logging middleware. The test sends 500 requests to each app with the concurrency of 50 requests. Below is the output of Apache Bench command:
+
+### Concise result
+
+`$  ab -n 500 -c 50 http://localhost:82/hello/world`
+```
+This is ApacheBench, Version 2.3 <$Revision: 1430300 $>
+Copyright 1996 Adam Twiss, Zeus Technology Ltd, http://www.zeustech.net/
+Licensed to The Apache Software Foundation, http://www.apache.org/
+
+Benchmarking 127.0.0.1 (be patient)
+Completed 100 requests
+Completed 200 requests
+Completed 300 requests
+Completed 400 requests
+Completed 500 requests
+Finished 500 requests
+
+
+Server Software:        nginx/1.12.2
+Server Hostname:        127.0.0.1
+Server Port:            82
+
+Document Path:          /hello/ardi
+Document Length:        24 bytes
+
+Concurrency Level:      50
+Time taken for tests:   1.154 seconds
+Complete requests:      500
+Failed requests:        0
+Write errors:           0
+Total transferred:      151500 bytes
+HTML transferred:       12000 bytes
+Requests per second:    433.18 [#/sec] (mean)
+Time per request:       115.425 [ms] (mean)
+Time per request:       2.308 [ms] (mean, across all concurrent requests)
+Transfer rate:          128.18 [Kbytes/sec] received
+
+Connection Times (ms)
+              min  mean[+/-sd] median   max
+Connect:        0    2   0.9      2       4
+Processing:     7  110  25.8    114     162
+Waiting:        5  108  25.4    113     160
+Total:          8  111  25.7    117     163
+
+Percentage of the requests served within a certain time (ms)
+  50%    117
+  66%    119
+  75%    122
+  80%    123
+  90%    123
+  95%    163
+  98%    163
+  99%    163
+ 100%    163 (longest request)
+```
+
+### Laravel result
+
+`$  ab -n 500 -c 50 http://localhost:81/`
+```
+This is ApacheBench, Version 2.3 <$Revision: 1430300 $>
+Copyright 1996 Adam Twiss, Zeus Technology Ltd, http://www.zeustech.net/
+Licensed to The Apache Software Foundation, http://www.apache.org/
+
+Benchmarking 127.0.0.1 (be patient)
+Completed 100 requests
+Completed 200 requests
+Completed 300 requests
+Completed 400 requests
+Completed 500 requests
+Finished 500 requests
+
+
+Server Software:        nginx/1.12.2
+Server Hostname:        127.0.0.1
+Server Port:            81
+
+Document Path:          /
+Document Length:        11 bytes
+
+Concurrency Level:      50
+Time taken for tests:   15.738 seconds
+Complete requests:      500
+Failed requests:        0
+Write errors:           0
+Total transferred:      122500 bytes
+HTML transferred:       5500 bytes
+Requests per second:    31.77 [#/sec] (mean)
+Time per request:       1573.850 [ms] (mean)
+Time per request:       31.477 [ms] (mean, across all concurrent requests)
+Transfer rate:          7.60 [Kbytes/sec] received
+
+Connection Times (ms)
+              min  mean[+/-sd] median   max
+Connect:        0    0   0.5      0       2
+Processing:   202 1535 228.8   1525    2180
+Waiting:      200 1535 228.7   1525    2180
+Total:        203 1535 228.8   1525    2180
+
+Percentage of the requests served within a certain time (ms)
+  50%   1525
+  66%   1574
+  75%   1648
+  80%   1690
+  90%   1837
+  95%   1913
+  98%   2048
+  99%   2102
+ 100%   2180 (longest request)
+```
+
+### Benchmark Conclusion
+
+`Concise` serves request 14 times faster (with mean of 433 requests/second vs Laravel's 32 requests/second)
+
+This might not be a great comparison as Laravel is a Framework which is naturally heavier and Concise is a micro framework which is light. But it showcases that `Concise` can definitely be a good choice for building micro services.
 
 ## Contributing
 
