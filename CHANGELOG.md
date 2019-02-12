@@ -1,4 +1,8 @@
-* 0.3.3
+* 0.4.1
+
+- Add meta key to request to get additional information
+- Use `$request['meta']['hasRouteMatch']` to know in middlewares if there is a matching route
+
 * 0.4.0
 
 - Add `headers` to request using `getallheaders` or the polyfill

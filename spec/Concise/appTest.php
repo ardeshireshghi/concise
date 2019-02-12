@@ -69,6 +69,9 @@ class AppTest extends TestCase
       'body' => [],
       'headers' => [
         'Host' => 'google.com'
+      ],
+      'meta' => [
+        'hasRouteMatch' => true
       ]
     ];
 
@@ -163,6 +166,9 @@ class AppTest extends TestCase
       'body' => [],
       'headers' => [
         'Host' => 'google.com'
+      ],
+      'meta' => [
+        'hasRouteMatch' => true
       ]
     ];
 
@@ -209,6 +215,9 @@ class AppTest extends TestCase
       'body' => [],
       'headers' => [
         'Host' => 'google.com'
+      ],
+      'meta' => [
+        'hasRouteMatch' => true
       ]
     ];
 

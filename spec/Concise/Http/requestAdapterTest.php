@@ -42,6 +42,9 @@ class RequestAdapterTest extends TestCase
       'headers' => [
         'Host' => 'localhost',
         'Content-Type' => null
+      ],
+      'meta' => [
+        'hasRouteMatch' => true
       ]
     ], $request);
   }
@@ -79,6 +82,9 @@ class RequestAdapterTest extends TestCase
       'headers' => [
         'Host' => 'localhost',
         'Content-Type' => 'application/x-www-form-urlencoded'
+      ],
+      'meta' => [
+        'hasRouteMatch' => true
       ]
     ], $request);
   }
@@ -118,6 +124,9 @@ class RequestAdapterTest extends TestCase
       'headers' => [
         'Host' => 'localhost',
         'Content-Type' => 'application/json'
+      ],
+      'meta' => [
+        'hasRouteMatch' => true
       ]
     ], $request);
 
@@ -159,6 +168,9 @@ class RequestAdapterTest extends TestCase
       'headers' => [
         'Host' => 'localhost',
         'Content-Type' => 'text/plain'
+      ],
+      'meta' => [
+        'hasRouteMatch' => true
       ]
     ], $request);
 
@@ -198,6 +210,9 @@ EOF;
       'headers' => [
         'Host' => 'localhost',
         'Content-Type' => 'text/plain'
+      ],
+      'meta' => [
+        'hasRouteMatch' => true
       ]
     ], $request);
 
@@ -225,6 +240,9 @@ EOF;
       'headers' => [
         'Host' => 'localhost',
         'Content-Type' => null
+      ],
+      'meta' => [
+        'hasRouteMatch' => false
       ]
     ], $request);
   }

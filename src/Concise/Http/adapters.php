@@ -34,7 +34,10 @@ function request(array $matchingRoute = null)
     'query'   => $_GET,
     'body'    => parseBody(),
     'method'  => method(),
-    'headers' => headers()
+    'headers' => headers(),
+    'meta'    => [
+      'hasRouteMatch' => !is_null($matchingRoute)
+    ]
   ];
 }
 

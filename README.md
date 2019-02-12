@@ -21,7 +21,7 @@ A step by step series of examples that tell you how to get a development env run
 Say what the step will be
 
 ```
-composer require ardeshireshghi/concise:0.4.0
+composer require ardeshireshghi/concise:0.4.1
 ```
 
 ### Usage (Hello world)
@@ -39,44 +39,67 @@ use function Concise\Http\Response\response;
 use function Concise\Http\Request\url;
 use function Concise\Http\Request\path;
 use function Concise\Middleware\Factory\create as createMiddleware;
+use function Concise\FP\curry;
+use function Concise\FP\ifElse;
 
-function getLogger()
+function createLogger()
 {
-  static $logger = null;
-  if (!$logger) {
-    $outputFileHandler = fopen('php://stdout', 'w');
-    $logger = function (string $message) use ($outputFileHandler) {
-      fwrite($outputFileHandler, $message);
-    };
-  }
+  $outputFileHandler = fopen('php://stdout', 'w');
 
-  return $logger;
+  return function (string $message, array $context = null) use ($outputFileHandler) {
+    fwrite($outputFileHandler, $message);
+    return $context;
+  };
 }
 
-$loggerMiddleware = createMiddleware(function (callable $nextRouteHandler, array $middlewareParams = [], array $request = []) {
-  $logger = getLogger();
+/**
+* Curried logger which logs message and returns the context
+*
+* @param string $message Message to output
+* @param array $context to be passed to the next function
+* @return mixed Either the curried function or the array context
+*/
+function logger(...$thisArgs)
+{
+  static $logger = null;
 
-  $logger("\n\nRequest: ".json_encode($request));
-  if (count($request['params']) > 0) {
-    $logger("\nRoute with path".path().' matching. Params are: '.implode(',', $request['params'])."\n");
-  } else {
-    $logger("\nNo route matching for: ".url(). "\n");
+  if (!$logger) {
+    $logger = createLogger();
   }
 
-  return $nextRouteHandler($request);
-});
+  return curry($logger)(...$thisArgs);
+}
 
-$routes = [
-  get('/hello/:name')(function ($request) {
-    return response('Welcome to Concise, ' . $request['params']['name'], []);
-  })
-];
+function loggerMiddleware()
+{
+  return createMiddleware(function (callable $nextRouteHandler, array $middlewareParams = [], array $request) {
+    return $nextRouteHandler(ifElse(
+      function($request) {
+        return $request['meta']['hasRouteMatch'];
+      },
+      logger("\n\nRoute with path".path().' matching. Params are: '.implode(',', $request['params'])."\n"),
+      logger("\nNo route matching for: ".url(). "\n")
+    )(logger("\n\nRequest: ".json_encode($request))($request)));
+  });
+}
 
-$middlewares = [
-  $loggerMiddleware
-];
+function routes()
+{
+  return [
+    get('/hello/:name')(function ($request) {
+      return response('Welcome to Concise, ' . $request['params']['name'], []);
+    })
+  ];
+}
 
-getLogger()('Response: '.json_encode(app($routes)($middlewares))."\n");
+function middlewares()
+{
+  return [
+    loggerMiddleware()
+  ];
+}
+
+logger("\nResponse: ".json_encode(app(routes())(middlewares()))."\n")([]);
 ```
 
 And try to run it using PHP server:
