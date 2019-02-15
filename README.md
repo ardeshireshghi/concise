@@ -16,15 +16,11 @@ On Linux make sure `xml` and `mbstring` PHP modules are installed as well.
 
 ### Installation
 
-A step by step series of examples that tell you how to get a development env running
-
-Say what the step will be
-
 ```
-composer require ardeshireshghi/concise:0.4.1
+composer require ardeshireshghi/concise:0.4.3
 ```
 
-### Usage (Hello world)
+### Getting Started (Hello World)
 
 Create `app.php` file and add the following content:
 
@@ -110,7 +106,26 @@ $ php -S localhost:5000 app.php
 
 Going to http://localhost:5000/hello/coder will now display "Welcome to Concise, coder".
 
+## More resources
 
+### Documentation Website (WIP)
+
+For more resources and guides see [DOCUMENTATION](https://concise-php.github.io) website.
+
+### Examples: Web API script
+
+There is also an example app in `/examples/web-api/api.php`. After cloning the repo, you can run it with:
+
+```bash
+$ composer run-script start:web_api
+```
+
+Use the following to test both the `authMiddleware` and parsing of JSON payload:
+
+```bash
+curl -X POST -H 'Authorization: Bearer abcd1234efgh5678' -H 'Content-Type: application/json' --data '{"filename": "test.jpg"}' http://127.0.0.1:5000/api/upload
+
+```
 ## Development
 
 ### Installation
@@ -127,20 +142,6 @@ To execute the test suite, you'll need phpunit.
 $ phpunit --colors
 ```
 
-### Example Web API script
-
-There is also an example API script in `/examples/web-api/api.php`. After cloning the repo, you can run it with:
-
-```bash
-$ composer run-script start:web_api
-```
-
-Use the following to test both the `authMiddleware` and parsing of JSON payload:
-
-```bash
-curl -X POST -H 'Authorization: Bearer abcd1234efgh5678' -H 'Content-Type: application/json' --data '{"filename": "test.jpg"}' http://127.0.0.1:5000/api/upload
-
-```
 ## Benchmarking
 
 The benchmark is done on a 1 core cpu 2GB RAM Centos 7.5 cloud server on DigitalOcean after setting up Nginx with default config, php-fpm (PHP 7.3). The performance has been compared with Laravel, by disabling the Laravel middlewares in `Http/Kernel.php` and changing the home controller to just say 'Hello world'. Also using the above code example for `Concise` also without the logging middleware. The test sends 500 requests to each app with the concurrency of 50 requests. Below is the output of Apache Bench command:

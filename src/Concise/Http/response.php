@@ -8,27 +8,25 @@ use function Concise\FP\compose;
 
 function response(...$thisArgs)
 {
-  return call_user_func_array(curry(_createResponse()), $thisArgs);
+  return curry('Concise\Http\Response\_response')(...$thisArgs);
+}
+
+function json($responseBodyArray, ...$thisArgs)
+{
+  return curry(compose(
+    setHeader('Content-Type', 'application/json'),
+    compose('Concise\Http\Response\response', 'json_encode')($responseBodyArray)
+  ))(...$thisArgs);
 }
 
 function setHeader(...$thisArgs)
 {
-  return call_user_func_array(curry(_createSetHeader()), $thisArgs);
+  return curry('Concise\Http\Response\_setHeader')(...$thisArgs);
 }
 
 function statusCode(...$thisArgs)
 {
-  return call_user_func_array(curry(_createStatusCode()), $thisArgs);
-}
-
-function _createStatusCode()
-{
-  return function (int $code, array $responseContext = []) {
-    $responseContext = (count($responseContext) === 0) ? defaultResponseContext() : $responseContext;
-    return array_replace_recursive([], $responseContext, [
-      'status' => $code
-    ]);
-  };
+  return curry('Concise\Http\Response\_statusCode')(...$thisArgs);
 }
 
 function defaultResponseContext()
@@ -41,24 +39,27 @@ function defaultResponseContext()
   ];
 }
 
-function _createSetHeader()
+function _statusCode(int $code, array $responseContext = [])
 {
-  return function ($headerName, $headerValue, array $responseContext = []) {
-    $responseContext = (count($responseContext) === 0) ? defaultResponseContext() : $responseContext;
-    return array_replace_recursive([], $responseContext, [
-      'headers' => [
-        $headerName => $headerValue
-      ]
-    ]);
-  };
+  $responseContext = (count($responseContext) === 0) ? defaultResponseContext() : $responseContext;
+  return array_replace_recursive([], $responseContext, [
+    'status' => $code
+  ]);
 }
 
-function _createResponse()
+function _setHeader($headerName, $headerValue, array $responseContext = []) {
+  $responseContext = (count($responseContext) === 0) ? defaultResponseContext() : $responseContext;
+  return array_replace_recursive([], $responseContext, [
+    'headers' => [
+      $headerName => $headerValue
+    ]
+  ]);
+}
+
+function _response($data, array $responseContext = [])
 {
-  return function ($data, array $responseContext = []) {
-    $responseContext = (count($responseContext) === 0) ? defaultResponseContext() : $responseContext;
-    return array_merge($responseContext, [
-      'body' => $data
-    ]);
-  };
+  $responseContext = (count($responseContext) === 0) ? defaultResponseContext() : $responseContext;
+  return array_merge($responseContext, [
+    'body' => $data
+  ]);
 }

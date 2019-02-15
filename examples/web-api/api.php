@@ -6,11 +6,12 @@ use function Concise\app;
 use function Concise\Routing\route;
 use function Concise\Routing\post;
 
-use function Concise\Http\Response\response;
+use function Concise\Http\Response\json;
 use function Concise\Http\Request\path as requestPath;
 use function Concise\Http\Response\setHeader;
 use function Concise\Http\Response\statusCode;
 use function Concise\Http\Session\set as setSession;
+
 use function Concise\FP\ifElse;
 use function Concise\FP\tryCatch;
 
@@ -31,12 +32,12 @@ function authorizer($nextRouteHandler)
       throw new \Exception('Invalid access token');
     }
     return $nextRouteHandler($request);
-  }, function (\Exception $error) {
-    return setHeader('Content-Type', 'application/json')(response(json_encode([
+  }, function ($error) {
+    return json([
       'error' => true,
       'status' => 401,
       'message' => $error->getMessage()
-    ]))(statusCode(401, [])));
+    ])(statusCode(401, []));
   });
 }
 
@@ -60,49 +61,49 @@ function routes()
 {
   return [
     route('GET')('/home')(function () {
-      return setHeader('Content-Type', 'application/json')(response(json_encode([
+      return json([
         'route' => 'home',
         'message' => 'hello mate'
-      ]), []));
+      ], []);
     }),
 
     route('GET')('/api/user/:id')(function (array $request) {
-      return setHeader('Content-Type', 'application/json')(response(json_encode([
+      return json([
         'route' => '/api/user',
         'data'  => [ 'user' => [ 'id' => $request['params']['id'] ] ]
-      ]), []));
+      ], []);
     }),
 
     route('POST')('/api/upload')(function (array $request) {
-      return setHeader('Content-Type', 'application/json')(response(json_encode([
+      return json([
         'route'   => 'upload',
         'data'    => [
           'filename' => isset($request['body']['filename']) ? $request['body']['filename'] : ''
         ],
         'message' => 'Can upload your files'
-      ]), []));
+      ], []);
     }),
 
     route('GET')('/api/upload/:upload_id')(function (array $request) {
-      return setHeader('Content-Type', 'application/json')(response(json_encode([
+      return json([
         'route' => 'GET upload with ID',
         'data'  => [ 'user' => [ 'upload_id' => $request['params']['upload_id'] ] ]
-      ]), []));
+      ], []);
     }),
 
     post('/api/auth/login')(function (array $request) {
       return ifElse(function ($body) {
         return isset($body['password']) && $body['password'] === 'V3ryS3cur3Passw0rd';
       })(function () {
-        return setHeader('Content-Type', 'application/json')(response(json_encode([
+        return json([
           'error' => false,
           'access_token'  => setSession([ 'access_token' => '12v6gh5y643fds453ghgdf4zmb7439kl'])['access_token']
-        ]), []));
+        ], []);
       })(function () {
-        return statusCode(422)(setHeader('Content-Type', 'application/json')(response(json_encode([
+        return statusCode(422)(json([
           'error'   => true,
           'message' => 'Invalid password'
-        ]), [])));
+        ], []));
       })($request['body']);
     })
   ];

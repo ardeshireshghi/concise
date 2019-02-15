@@ -1,3 +1,7 @@
+* 0.4.3
+
+- Add `json` response function
+
 * 0.4.2
 
 - Improve middleware factory to be more flexible with number of arguments

@@ -2,6 +2,7 @@
 
 use PHPUnit\Framework\TestCase;
 use function Concise\Http\Response\response;
+use function Concise\Http\Response\json;
 use function Concise\Http\Response\setHeader;
 use function Concise\Http\Response\send;
 use function Concise\Http\Response\statusCode;
@@ -42,7 +43,7 @@ class ResponseTest extends TestCase
     ], $result);
   }
 
-  public function testSetResponseWithSetHeaderAndSend()
+  public function testSetResponseWithSetHeader()
   {
     $contentType = setHeader('Content-Type');
     $cacheControl = setHeader('Cache-Control');
@@ -53,6 +54,22 @@ class ResponseTest extends TestCase
       'headers' => [
         'Content-Type' => 'application/json',
         'Cache-Control' => 'public, max-age=31536000'
+      ],
+      'body' => '{"name":"bob"}',
+      'status' => 201
+    ], $result);
+  }
+
+  public function testJson()
+  {
+    $contentType = setHeader('Content-Type');
+    $cacheControl = setHeader('Cache-Control');
+
+    $result = json(['name' => 'bob'])(statusCode(201)([]));
+
+    $this->assertEquals([
+      'headers' => [
+        'Content-Type' => 'application/json'
       ],
       'body' => '{"name":"bob"}',
       'status' => 201
