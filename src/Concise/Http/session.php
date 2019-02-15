@@ -33,7 +33,7 @@ function initialise($config)
 
 function middlewareHandler()
 {
-  return function (callable $nextRouteHandler, $middlewareParams, array $request = array()) {
+  return function (callable $nextRouteHandler, $middlewareParams, array $request = []) {
     initialise($middlewareParams);
     return $nextRouteHandler($request);
   };

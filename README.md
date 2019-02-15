@@ -132,7 +132,7 @@ $ phpunit --colors
 There is also an example API script in `/examples/web-api/api.php`. After cloning the repo, you can run it with:
 
 ```bash
-$ composer run-script start:web_api --timeout 0
+$ composer run-script start:web_api
 ```
 
 Use the following to test both the `authMiddleware` and parsing of JSON payload:

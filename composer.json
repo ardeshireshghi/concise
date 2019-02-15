@@ -1,6 +1,6 @@
 {
     "name": "ardeshireshghi/concise",
-    "version": "0.4.1",
+    "version": "0.4.2",
     "require": {
         "php": ">7.1.0"
     },
@@ -32,5 +32,8 @@
     "require-dev": {
         "friendsofphp/php-cs-fixer": "^2.13",
         "phpunit/phpunit": "^7.5"
+    },
+    "config": {
+        "process-timeout": 0
     }
 }

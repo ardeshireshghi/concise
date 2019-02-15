@@ -1,3 +1,9 @@
+* 0.4.2
+
+- Improve middleware factory to be more flexible with number of arguments
+- Refactor example code `web-api/api.php`
+
+
 * 0.4.1
 
 - Add meta key to request to get additional information

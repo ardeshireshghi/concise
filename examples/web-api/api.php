@@ -45,61 +45,69 @@ function routeProtected($requestPath)
   return substr($requestPath, 0, 4) === '/api' && strpos($requestPath, 'login') === false;
 }
 
-$authMiddleware = createMiddleware(function (callable $nextRouteHandler, array $middlewareParams = [], array $request = []) {
-  return ifElse('routeProtected', function () use ($nextRouteHandler, $request) {
-    return authorizer($nextRouteHandler)($request);
-  }, function () use ($nextRouteHandler, $request) {
-    return $nextRouteHandler($request);
-  })(requestPath());
-});
+function authMiddleware()
+{
+  return createMiddleware(function (callable $nextRouteHandler, array $middlewareParams = [], array $request = []) {
+    return ifElse('routeProtected', function () use ($nextRouteHandler, $request) {
+      return authorizer($nextRouteHandler)($request);
+    }, function () use ($nextRouteHandler, $request) {
+      return $nextRouteHandler($request);
+    })(requestPath());
+  });
+}
 
-app([
-  route('GET', '/home', function () {
-    return setHeader('Content-Type', 'application/json')(response(json_encode([
-      'route' => 'home',
-      'message' => 'hello mate'
-    ]), []));
-  }),
-
-  route('GET', '/api/user/:id', function (array $request) {
-    return setHeader('Content-Type', 'application/json')(response(json_encode([
-      'route' => '/api/user',
-      'data'  => [ 'user' => [ 'id' => $request['params']['id'] ] ]
-    ]), []));
-  }),
-
-  route('POST', '/api/upload', function (array $request) {
-    return setHeader('Content-Type', 'application/json')(response(json_encode([
-      'route'   => 'upload',
-      'data'    => [
-        'filename' => isset($request['body']['filename']) ? $request['body']['filename'] : ''
-      ],
-      'message' => 'Can upload your files'
-    ]), []));
-  }),
-
-  route('GET', '/api/upload/:upload_id', function (array $request) {
-    return setHeader('Content-Type', 'application/json')(response(json_encode([
-      'route' => 'GET upload with ID',
-      'data'  => [ 'user' => [ 'upload_id' => $request['params']['upload_id'] ] ]
-    ]), []));
-  }),
-
-  post('/api/auth/login')(function (array $request) {
-    return ifElse(function ($body) {
-      return isset($body['password']) && $body['password'] === 'V3ryS3cur3Passw0rd';
-    })(function () {
+function routes()
+{
+  return [
+    route('GET')('/home')(function () {
       return setHeader('Content-Type', 'application/json')(response(json_encode([
-        'error' => false,
-        'access_token'  => setSession([ 'access_token' => '12v6gh5y643fds453ghgdf4zmb7439kl'])['access_token']
+        'route' => 'home',
+        'message' => 'hello mate'
       ]), []));
-    })(function () {
-      return statusCode(422)(setHeader('Content-Type', 'application/json')(response(json_encode([
-        'error'   => true,
-        'message' => 'Invalid password'
-      ]), [])));
-    })($request['body']);
-  })
-])([
-  $authMiddleware
+    }),
+
+    route('GET')('/api/user/:id')(function (array $request) {
+      return setHeader('Content-Type', 'application/json')(response(json_encode([
+        'route' => '/api/user',
+        'data'  => [ 'user' => [ 'id' => $request['params']['id'] ] ]
+      ]), []));
+    }),
+
+    route('POST')('/api/upload')(function (array $request) {
+      return setHeader('Content-Type', 'application/json')(response(json_encode([
+        'route'   => 'upload',
+        'data'    => [
+          'filename' => isset($request['body']['filename']) ? $request['body']['filename'] : ''
+        ],
+        'message' => 'Can upload your files'
+      ]), []));
+    }),
+
+    route('GET')('/api/upload/:upload_id')(function (array $request) {
+      return setHeader('Content-Type', 'application/json')(response(json_encode([
+        'route' => 'GET upload with ID',
+        'data'  => [ 'user' => [ 'upload_id' => $request['params']['upload_id'] ] ]
+      ]), []));
+    }),
+
+    post('/api/auth/login')(function (array $request) {
+      return ifElse(function ($body) {
+        return isset($body['password']) && $body['password'] === 'V3ryS3cur3Passw0rd';
+      })(function () {
+        return setHeader('Content-Type', 'application/json')(response(json_encode([
+          'error' => false,
+          'access_token'  => setSession([ 'access_token' => '12v6gh5y643fds453ghgdf4zmb7439kl'])['access_token']
+        ]), []));
+      })(function () {
+        return statusCode(422)(setHeader('Content-Type', 'application/json')(response(json_encode([
+          'error'   => true,
+          'message' => 'Invalid password'
+        ]), [])));
+      })($request['body']);
+    })
+  ];
+}
+
+app(routes())([
+  authMiddleware()
 ]);

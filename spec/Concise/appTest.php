@@ -128,7 +128,7 @@ class AppTest extends TestCase
     $_SERVER['REQUEST_METHOD'] = 'POST';
 
     $expectedOutputBody = 'Route for path: "/not/found/100" not found';
-    $middlewareHandlerSpy = (new Spy())->setFunction(function (callable $notFoundHandler, $middlewareParams) {
+    $middlewareHandlerSpy = (new Spy())->setFunction(function (callable $notFoundHandler, $middlewareParams, $request) {
       return $notFoundHandler();
     });
 
