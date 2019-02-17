@@ -279,4 +279,4 @@ This project is licensed under the MIT License - see the [LICENSE.md](LICENSE.md
 
 * This framework/library is inspired by functional language frameworks like Clojure [Ring](https://github.com/ring-clojure/ring)
 
-* Many of the functional language helper functions are inspired by JS Rambda library [Rambda](https://ramdajs.com/docs/)
+* Many of the functional language helper functions are inspired by JS Ramda library [Ramda](https://ramdajs.com/docs/)
